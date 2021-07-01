@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ESalesTrainee">
-        <activity android:name=".features.LoginActivity">
+        <activity android:name=".features.customer_list.CustomerListActivity" />
+        <activity android:name=".features.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

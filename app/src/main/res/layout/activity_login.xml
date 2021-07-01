@@ -4,64 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.LoginActivity">
+    tools:context=".features.login.LoginActivity">
 
 
     <ImageView
-        android:contentDescription="@string/app_name"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_120"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/logo_hq"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/username"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_48"
         android:layout_marginTop="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_48"
-        android:inputType="text"
         android:hint="@string/user_name"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+    <TextView
+        android:id="@+id/warningUsername"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username_warning"
+        android:textColor="@color/red_1A3D"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
+
     <ImageView
-        android:contentDescription="@string/app_name"
         android:id="@+id/imageView2"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/baseline_person_18"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintEnd_toStartOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/username"
+        app:layout_constraintEnd_toStartOf="@+id/username"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintTop_toTopOf="@+id/username" />
 
     <ImageView
-        android:contentDescription="@string/app_name"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/baseline_vpn_key_24"
-        app:layout_constraintBottom_toBottomOf="@+id/editText2"
+        app:layout_constraintBottom_toBottomOf="@+id/password"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/editText2" />
+        app:layout_constraintTop_toTopOf="@+id/password" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/password"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_5"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editText"
-        app:layout_constraintStart_toStartOf="@+id/editText"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintEnd_toEndOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/warningUsername" />
+
+    <TextView
+        android:id="@+id/warningPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password_warning"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@color/red_1A3D"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/buttonLogin"
@@ -74,8 +96,8 @@
         android:text="@string/login"
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/buttonExit"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/warningPassword" />
 
     <Button
         android:id="@+id/buttonExit"
@@ -86,7 +108,7 @@
         android:background="@color/red_3333"
         android:text="@string/exit"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
+        app:layout_constraintEnd_toEndOf="@+id/password"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonLogin"
         app:layout_constraintTop_toTopOf="@+id/buttonLogin" />
