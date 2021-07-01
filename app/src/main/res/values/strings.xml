@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">eSales Trainee</string>
+    <string name="user_name">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="exit">Thoát</string>
+    <string name="about_company">về chúng tôi</string>
+    <string name="eSale_version">eSale Version: 2.0</string>
+    <string name="version_date">Phiên bản ngày:</string>
 </resources>
