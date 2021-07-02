@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.hqsoft.esales.trainee.R;
@@ -27,6 +30,23 @@ public class AddItemPopup extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_item_popup, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setSizeDialog();
+    }
+
+    private void setSizeDialog() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float height = displayMetrics.heightPixels;
+        float width = displayMetrics.widthPixels;
+        WindowManager.LayoutParams params;
+        params = Objects.requireNonNull(getDialog()).getWindow().getAttributes();
+        params.width =(int) width*90/100;
+        params.height =(int) height*90/100;
+        getDialog().getWindow().setAttributes(params);
     }
 
     @Override

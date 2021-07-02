@@ -40,9 +40,9 @@
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:text="@string/order_information"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,9 +130,9 @@
                 android:layout_marginBottom="@dimen/dp_5"
                 android:background="@android:color/transparent"
                 android:hint="@string/note_hint"
+                android:importantForAutofill="no"
                 android:inputType="text"
-                android:textSize="14sp"
-                android:importantForAutofill="no" />
+                android:textSize="14sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -142,6 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/red_1A3D"
+        android:minHeight="@dimen/dp_30"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/cardHeader">
 
@@ -149,6 +150,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:paddingStart="@dimen/dp_4"
             android:paddingLeft="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
@@ -161,8 +163,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:gravity="end"
             android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
             android:paddingStart="@dimen/dp_4"
             android:paddingLeft="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
@@ -176,6 +178,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
             android:paddingStart="@dimen/dp_4"
             android:paddingLeft="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
@@ -189,6 +192,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
             android:paddingStart="@dimen/dp_4"
             android:paddingLeft="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
@@ -202,6 +206,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
             android:paddingStart="@dimen/dp_4"
             android:paddingLeft="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
@@ -209,11 +214,13 @@
             android:text="@string/amount"
             android:textColor="@color/white"
             android:textSize="14sp" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
             android:paddingStart="@dimen/dp_4"
             android:paddingLeft="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
@@ -231,6 +238,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="@dimen/dp_0"
@@ -246,18 +254,18 @@
             android:id="@+id/btnAccItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_item"
             android:layout_weight="1"
             android:background="@color/red_3333"
+            android:text="@string/add_item"
             android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btnBuy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/buy"
-            android:background="@color/gray"
             android:layout_weight="1"
+            android:background="@color/gray"
+            android:text="@string/buy"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

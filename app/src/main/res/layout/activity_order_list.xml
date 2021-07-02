@@ -55,10 +55,10 @@
                     android:layout_marginStart="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:textStyle="bold"
                     android:text="@string/date_buy"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,51 +91,54 @@
         android:layout_marginTop="@dimen/dp_5"
         android:layout_marginRight="@dimen/dp_2"
         android:background="@color/red_1A3D"
+        android:minHeight="@dimen/dp_30"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/visitDayCard">
 
-        <TableRow>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingLeft="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_4"
-                android:paddingRight="@dimen/dp_4"
-                android:text="@string/stt"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
+            android:text="@string/stt"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:background="@drawable/left_line_bg_red"
-                android:paddingStart="@dimen/dp_24"
-                android:paddingLeft="@dimen/dp_24"
-                android:paddingEnd="@dimen/dp_24"
-                android:paddingRight="@dimen/dp_24"
-                android:text="@string/orderList"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="11"
+            android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_24"
+            android:paddingLeft="@dimen/dp_24"
+            android:paddingEnd="@dimen/dp_24"
+            android:paddingRight="@dimen/dp_24"
+            android:text="@string/orderList"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@drawable/left_line_bg_red"
-                android:paddingStart="@dimen/dp_24"
-                android:paddingLeft="@dimen/dp_24"
-                android:paddingEnd="@dimen/dp_24"
-                android:paddingRight="@dimen/dp_24"
-                android:text="@string/total_per_order"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </TableRow>
-    </TableLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:background="@drawable/left_line_bg_red"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_24"
+            android:paddingLeft="@dimen/dp_24"
+            android:paddingEnd="@dimen/dp_24"
+            android:paddingRight="@dimen/dp_24"
+            android:text="@string/total_per_order"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderList"
@@ -146,11 +149,12 @@
         app:layout_constraintStart_toStartOf="@+id/tableLayout"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/red_1A3D"
+        android:minHeight="@dimen/dp_36"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -162,6 +166,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_48"
             android:layout_marginLeft="@dimen/dp_48"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/total"
             android:textAllCaps="true"
             android:textColor="@color/white"
@@ -173,11 +179,12 @@
 
         <TextView
             android:id="@+id/total"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_24"
             android:layout_marginRight="@dimen/dp_24"
-            android:gravity="end"
+            android:gravity="end|center"
+            android:layout_gravity="end|center"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -186,5 +193,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="0" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,11 +18,11 @@
         app:titleTextColor="@color/white" />
 
     <androidx.cardview.widget.CardView
-        android:layout_margin="@dimen/dp_5"
-        app:cardCornerRadius="@dimen/dp_2"
         android:id="@+id/cardHeader"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        app:cardCornerRadius="@dimen/dp_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -47,70 +47,70 @@
                 android:id="@+id/dateVisit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:background="@android:color/transparent"
                 android:hint="@string/search_hint"
                 android:inputType="datetime"
-                android:textSize="14sp"
-                android:layout_marginStart="@dimen/dp_5" />
+                android:textSize="14sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_5"
+        android:background="@color/red_1A3D"
+        android:minHeight="@dimen/dp_30"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardHeader">
 
-        <TableRow
-            android:layout_marginLeft="@dimen/dp_2"
-            android:layout_marginRight="@dimen/dp_2"
-            android:background="@color/red_1A3D">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
+            android:gravity="center"
+            android:paddingRight="@dimen/dp_4"
+            android:text="@string/stt"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingLeft="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_4"
-                android:paddingRight="@dimen/dp_4"
-                android:text="@string/stt"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:background="@drawable/left_line_bg_red"
+            android:gravity="start|center"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
+            android:text="@string/customer"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="7"
-                android:background="@drawable/left_line_bg_red"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingLeft="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_4"
-                android:paddingRight="@dimen/dp_4"
-                android:text="@string/customer"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="7"
-                android:background="@drawable/left_line_bg_red"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingLeft="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_4"
-                android:paddingRight="@dimen/dp_4"
-                android:text="@string/address"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </TableRow>
-    </TableLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:background="@drawable/left_line_bg_red"
+            android:gravity="start|center"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
+            android:text="@string/address"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/customerList"
