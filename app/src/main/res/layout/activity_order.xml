@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/Theme.MyFancyTheme"
-        app:title="@string/list_order"
+        app:title="@string/order"
         app:titleTextColor="@color/white" />
 
     <androidx.cardview.widget.CardView
@@ -40,6 +40,7 @@
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:text="@string/order_information"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
