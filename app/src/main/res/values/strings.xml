@@ -15,4 +15,9 @@
     <string name="stt">#</string>
     <string name="customer">Khách hàng</string>
     <string name="address">Địa chỉ</string>
+    <string name="list_order">Danh Sách Đơn Hàng</string>
+    <string name="day_buy">Ngày mua hàng</string>
+    <string name="order">Đơn hàng</string>
+    <string name="total_per_order">T.Tiền</string>
+    <string name="total">Tổng</string>
 </resources>

@@ -4,18 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
+import com.hqsoft.esales.trainee.features.order_list.OrderActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerListActivity extends AppCompatActivity implements OnItemRecyclerViewClick {
-    private CustomerAdapter customerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
     }
 
     void setupRecyclerView() {
-        customerAdapter = new CustomerAdapter(this);
+        CustomerAdapter customerAdapter = new CustomerAdapter(this);
         customerAdapter.addData(createListCustomer());
         RecyclerView recyclerView = findViewById(R.id.customerList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -44,6 +44,6 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
 
     @Override
     public void onClick(View view, int position) {
-        Toast.makeText(this, "Long Click: " +customerAdapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, OrderActivity.class));
     }
 }
