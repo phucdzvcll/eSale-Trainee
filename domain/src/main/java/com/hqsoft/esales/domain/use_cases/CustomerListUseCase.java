@@ -1,4 +1,4 @@
-package com.hqsoft.esales.domain.use_cases.customer_list_usecase;
+package com.hqsoft.esales.domain.use_cases;
 
 
 import androidx.annotation.NonNull;
@@ -8,7 +8,6 @@ import com.hqsoft.esales.domain.entities.CustomerEntity;
 import com.hqsoft.esales.domain.use_cases.base.UseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
-import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

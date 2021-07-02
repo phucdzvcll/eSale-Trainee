@@ -1,5 +1,6 @@
 package com.hqsoft.esales.trainee.features.order_list;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -15,6 +16,10 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hqsoft.esales.common_jvm.common.ResultPair;
+import com.hqsoft.esales.domain.use_cases.OrderListUseCase;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.order_list.model.OrderList;
 import com.hqsoft.esales.trainee.features.add_item_popup.AddItemPopup;
@@ -30,6 +35,7 @@ import java.util.Objects;
 
 public class OrderListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TextView dateVisit;
+    OrderListAdapter orderListAdapter = new OrderListAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +44,18 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
         setupActionBar();
         setupDateVisit();
         setupRecyclerView();
+        requestData();
         totalPrice();
         setupBtnAdd();
+    }
+
+    private void requestData() {
+        List<OrderList> listOrder = createListOrder();
+        if (listOrder != null) {
+            orderListAdapter.addData(listOrder);
+        } else {
+            //todo handle error case
+        }
     }
 
     private void setupActionBar() {
@@ -72,75 +88,35 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void setupRecyclerView() {
-        OrderListAdapter orderList = new OrderListAdapter();
-        orderList.addData(createListOrder());
         RecyclerView recyclerView = findViewById(R.id.orderList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(orderList);
+        recyclerView.setAdapter(orderListAdapter);
     }
 
+    @Nullable
     private List<OrderList> createListOrder() {
-        ArrayList<OrderList> orderLists = new ArrayList<>();
-        orderLists.add(new OrderList("Sales10001", "Sales1", "CustId1", 35000, 3, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales10002", "Sales1", "CustId1", 50000, 5, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales20001", "Sales2", "CustId2", 40000, 2, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales30001", "Sales3", "CustId3", 51000, 3, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        orderLists.add(new OrderList("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        return orderLists;
+        OrderListMapper orderListMapper = new OrderListMapper();
+        OrderListUseCase orderListUseCase = new OrderListUseCase();
+        ResultPair<OrderListUseCase.Result, UseCaseError> result = orderListUseCase.execute(new UseCaseParam.EmptyParam());
+        OrderListUseCase.Result success = result.getSuccess();
+        if (success != null) {
+            return orderListMapper.mapList(success.getCustomerEntityList());
+        } else {
+            return null;
+        }
     }
 
     private void totalPrice() {
         int total = 0;
         List<OrderList> orderLists = createListOrder();
-        for (int i = 0; i < orderLists.size(); i++) {
+        for (int i = 0; i < Objects.requireNonNull(orderLists).size(); i++) {
             total += orderLists.get(i).getOrderQty() * orderLists.get(i).getOrderAmt();
         }
         TextView totalPrice = findViewById(R.id.total);
         totalPrice.setText(MessageFormat.format("{0}", total));
     }
 
-    private void setupBtnAdd(){
+    private void setupBtnAdd() {
         ImageView btnAdd = findViewById(R.id.btnAdd);
 
         btnAdd.setOnClickListener(v -> {

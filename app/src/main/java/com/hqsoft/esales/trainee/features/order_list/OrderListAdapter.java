@@ -19,14 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
-    private ArrayList<OrderList> orderLists;
+    private ArrayList<OrderList> orderLists = new ArrayList<>();
 
-    void addData(List<OrderList> cuss) {
-        if (orderLists == null) {
-            orderLists = new ArrayList<>();
-        } else {
-            orderLists.clear();
-        }
+    void addData(@NonNull List<OrderList> cuss) {
+        orderLists.clear();
         orderLists.addAll(cuss);
         notifyDataSetChanged();
     }

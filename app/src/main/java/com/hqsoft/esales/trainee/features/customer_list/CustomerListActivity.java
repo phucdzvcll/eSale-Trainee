@@ -12,7 +12,7 @@ import android.view.View;
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
-import com.hqsoft.esales.domain.use_cases.customer_list_usecase.CustomerListUseCase;
+import com.hqsoft.esales.domain.use_cases.CustomerListUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
