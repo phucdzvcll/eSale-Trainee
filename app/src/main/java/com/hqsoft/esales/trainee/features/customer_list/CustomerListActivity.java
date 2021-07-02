@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
-import com.hqsoft.esales.trainee.features.order_list.OrderActivity;
+import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +44,6 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
 
     @Override
     public void onClick(View view, int position) {
-        startActivity(new Intent(this, OrderActivity.class));
+        startActivity(new Intent(this, OrderListActivity.class));
     }
 }

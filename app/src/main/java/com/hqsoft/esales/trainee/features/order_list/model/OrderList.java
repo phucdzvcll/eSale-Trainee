@@ -1,6 +1,6 @@
 package com.hqsoft.esales.trainee.features.order_list.model;
 
-public class Order {
+public class OrderList {
     public String getOrderNbr() {
         return orderNbr;
     }
@@ -37,7 +37,7 @@ public class Order {
     final String orderDate;
     final String remark;
 
-    public Order(String orderNbr, String slsperId, String customerId, int orderAmt, int orderQty, String orderDate, String remark) {
+    public OrderList(String orderNbr, String slsperId, String customerId, int orderAmt, int orderQty, String orderDate, String remark) {
         this.orderNbr = orderNbr;
         this.slsperId = slsperId;
         this.customerId = customerId;

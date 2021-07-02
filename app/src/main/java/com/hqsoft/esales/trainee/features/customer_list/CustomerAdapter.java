@@ -44,10 +44,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     public CustomerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View studentView =
+        View customerView =
                 inflater.inflate(R.layout.item_customer_list, parent, false);
 
-        return new CustomerViewHolder(studentView);
+        return new CustomerViewHolder(customerView);
     }
 
     @Override

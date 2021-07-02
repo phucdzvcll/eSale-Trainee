@@ -12,32 +12,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hqsoft.esales.trainee.R;
-import com.hqsoft.esales.trainee.features.order_list.model.Order;
+import com.hqsoft.esales.trainee.features.order_list.model.OrderList;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
-    private ArrayList<Order> orders;
+    private ArrayList<OrderList> orderLists;
     final OnItemRecyclerViewClick onItemRecyclerViewClick;
 
     public OrderListAdapter(OnItemRecyclerViewClick onItemRecyclerViewClick) {
         this.onItemRecyclerViewClick = onItemRecyclerViewClick;
     }
 
-    void addData(List<Order> cuss) {
-        if (orders == null) {
-            orders = new ArrayList<>();
+    void addData(List<OrderList> cuss) {
+        if (orderLists == null) {
+            orderLists = new ArrayList<>();
         } else {
-            orders.clear();
+            orderLists.clear();
         }
-        orders.addAll(cuss);
+        orderLists.addAll(cuss);
         notifyDataSetChanged();
-    }
-
-    Order getItem(int position) {
-        return orders.get(position);
     }
 
     @NonNull
@@ -45,19 +41,19 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     public OrderListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View studentView =
+        View orderView =
                 inflater.inflate(R.layout.item_order_list, parent, false);
 
-        return new OrderListViewHolder(studentView);
+        return new OrderListViewHolder(orderView);
     }
 
     @Override
     public void onBindViewHolder(OrderListViewHolder holder, int position) {
-        Order order = orders.get(position);
+        OrderList orderList = orderLists.get(position);
 
-        int total = (order.getOrderQty() * order.getOrderAmt());
+        int total = (orderList.getOrderQty() * orderList.getOrderAmt());
         holder.totalPerOrder.setText(MessageFormat.format("{0}", total));
-        holder.nameOrder.setText(order.getOrderNbr());
+        holder.nameOrder.setText(orderList.getOrderNbr());
 
         String stt = (position + 1) + "";
         holder.indexOrder.setText(stt);
@@ -71,7 +67,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public int getItemCount() {
-        return orders.size();
+        return orderLists.size();
     }
 
 
