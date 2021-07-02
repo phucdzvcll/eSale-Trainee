@@ -16,15 +16,19 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.hqsoft.esales.common_jvm.common.ResultPair;
+import com.hqsoft.esales.domain.use_cases.InventoryListUseCase;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
 import com.hqsoft.esales.trainee.features.order.OrderActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class AddItemPopup extends DialogFragment {
+    AddItemPopupAdapter addItemPopupAdapter = new AddItemPopupAdapter();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,14 +42,29 @@ public class AddItemPopup extends DialogFragment {
         setSizeDialog();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        requestData();
+    }
+
+    private void requestData() {
+        List<Inventory> listItem = createListItem();
+        if (listItem != null) {
+            addItemPopupAdapter.addData(listItem);
+        } else {
+            //todo handle error case
+        }
+    }
+
     private void setSizeDialog() {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float height = displayMetrics.heightPixels;
         float width = displayMetrics.widthPixels;
         WindowManager.LayoutParams params;
         params = Objects.requireNonNull(getDialog()).getWindow().getAttributes();
-        params.width =(int) width*90/100;
-        params.height =(int) height*90/100;
+        params.width = (int) width * 90 / 100;
+        params.height = (int) height * 90 / 100;
         getDialog().getWindow().setAttributes(params);
     }
 
@@ -57,98 +76,21 @@ public class AddItemPopup extends DialogFragment {
     }
 
     void setupRecyclerView(View view) {
-        AddItemPopupAdapter addItemPopupAdapter = new AddItemPopupAdapter();
-        addItemPopupAdapter.addData(createListItem());
         RecyclerView recyclerView = view.findViewById(R.id.itemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(addItemPopupAdapter);
     }
 
     private List<Inventory> createListItem() {
-        ArrayList<Inventory> inventories = new ArrayList<>();
-        inventories.add(new Inventory("SP1", "Sản phẩm 1", "CHAI", "10000"));
-        inventories.add(new Inventory("SP2", "Sản phẩm 2", "LON", "15000"));
-        inventories.add(new Inventory("SP3", "Sản phẩm 3", "CHAI", "20000"));
-        inventories.add(new Inventory("SP4", "Sản phẩm 4", "LON", "17000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        inventories.add(new Inventory("SP5", "Sản phẩm 5", "LON", "32000"));
-        return inventories;
+        InventoryListUseCase inventoryListUseCase = new InventoryListUseCase();
+        ResultPair<InventoryListUseCase.Result, UseCaseError> result = inventoryListUseCase.execute(new UseCaseParam.EmptyParam());
+        InventoryListUseCase.Result success = result.getSuccess();
+        if (success != null) {
+            InventoryMapper inventoryMapper = new InventoryMapper();
+            return inventoryMapper.mapList(success.getInventoryEntities());
+        } else {
+            return null;
+        }
     }
 
     private void handleBtnDialog(View view) {

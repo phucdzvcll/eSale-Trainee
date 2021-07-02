@@ -19,15 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapter.AddItemViewHolder> {
-    private ArrayList<Inventory> inventories;
+    private ArrayList<Inventory> inventories = new ArrayList<>();
 
 
-    void addData(List<Inventory> cuss) {
-        if (inventories == null) {
-            inventories = new ArrayList<>();
-        } else {
-            inventories.clear();
-        }
+    void addData(@NonNull List<Inventory> cuss) {
+        inventories.clear();
         inventories.addAll(cuss);
         notifyDataSetChanged();
     }
