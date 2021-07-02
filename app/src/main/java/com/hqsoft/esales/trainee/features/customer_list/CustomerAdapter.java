@@ -18,25 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder> {
-    private ArrayList<Customer> customers;
+    private final ArrayList<Customer> customers = new ArrayList<>();
     final OnItemRecyclerViewClick onItemRecyclerViewClick;
 
     public CustomerAdapter(OnItemRecyclerViewClick onItemRecyclerViewClick) {
         this.onItemRecyclerViewClick = onItemRecyclerViewClick;
     }
 
-    void addData(List<Customer> cuss) {
-        if (customers == null) {
-            customers = new ArrayList<>();
-        } else {
-            customers.clear();
-        }
+    void addData(@NonNull List<Customer> cuss) {
+        customers.clear();
         customers.addAll(cuss);
         notifyDataSetChanged();
-    }
-
-    Customer getItem(int position) {
-        return customers.get(position);
     }
 
     @NonNull

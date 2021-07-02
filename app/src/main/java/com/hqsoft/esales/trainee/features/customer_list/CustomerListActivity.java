@@ -1,5 +1,6 @@
 package com.hqsoft.esales.trainee.features.customer_list;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,38 +9,54 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.hqsoft.esales.common_jvm.common.ResultPair;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
+import com.hqsoft.esales.domain.use_cases.customer_list_usecase.CustomerListUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerListActivity extends AppCompatActivity implements OnItemRecyclerViewClick {
+    final CustomerAdapter customerAdapter = new CustomerAdapter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
         setupRecyclerView();
+        requestData();
+    }
+
+    private void requestData() {
+        List<Customer> listCustomer = createListCustomer();
+        if (listCustomer != null) {
+            customerAdapter.addData(listCustomer);
+        } else {
+            //todo handle error case
+        }
     }
 
     void setupRecyclerView() {
-        CustomerAdapter customerAdapter = new CustomerAdapter(this);
-        customerAdapter.addData(createListCustomer());
         RecyclerView recyclerView = findViewById(R.id.customerList);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(customerAdapter);
     }
 
+    @Nullable
     List<Customer> createListCustomer() {
-        ArrayList<Customer> customers = new ArrayList<>();
-        customers.add(new Customer("Khách Hàng A", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID1", "1234567890"));
-        customers.add(new Customer("Khách Hàng B", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID2", "1234567890"));
-        customers.add(new Customer("Khách Hàng C", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID3", "1234567890"));
-        customers.add(new Customer("Khách Hàng D", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID4", "1234567890"));
-        customers.add(new Customer("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        return customers;
+        CustomerListUseCase customerListUseCase = new CustomerListUseCase();
+        ResultPair<CustomerListUseCase.Result, UseCaseError> resultPair = customerListUseCase.execute(new UseCaseParam.EmptyParam());
+        CustomerListUseCase.Result success = resultPair.getSuccess();
+        CustomerListMapper customerListMapper = new CustomerListMapper();
+        if (success != null) {
+            return customerListMapper.mapList(success.getCustomerEntityList());
+        } else {
+            return null;
+        }
     }
 
     @Override

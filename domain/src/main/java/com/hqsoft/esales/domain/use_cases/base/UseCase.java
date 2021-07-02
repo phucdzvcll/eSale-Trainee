@@ -1,14 +1,17 @@
 package com.hqsoft.esales.domain.use_cases.base;
 
-abstract class UseCase<Params extends UseCaseParam, Result>{
+import com.hqsoft.esales.common_jvm.common.ResultPair;
 
-    protected abstract Result executeInternal(Params params);
+abstract public class UseCase<Params extends UseCaseParam, Result> {
 
-    Result execute(Params params){
-         try{
-             return executeInternal(params);
-        }catch (Exception e){
-            return null;
+    protected abstract ResultPair<Result, UseCaseError> executeInternal(Params params);
+
+    public ResultPair<Result, UseCaseError> execute(Params params) {
+        try {
+            return executeInternal(params);
+        } catch (Exception e) {
+            UseCaseError commonError = new UseCaseError.CommonError(e.getMessage());
+            return new ResultPair<>(null, commonError);
         }
     }
 }
