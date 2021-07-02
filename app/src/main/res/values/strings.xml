@@ -40,4 +40,5 @@
     <string name="add_item">Thêm Mặt Hàng</string>
     <string name="buy">Chốt Đơn Hàng</string>
     <string name="especially_character">*</string>
+    <string name="order">Mua Hàng</string>
 </resources>
