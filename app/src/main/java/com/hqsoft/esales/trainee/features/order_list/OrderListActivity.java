@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class OrderListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, OnItemRecyclerViewClick {
+public class OrderListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TextView dateVisit;
 
     @Override
@@ -72,7 +72,7 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void setupRecyclerView() {
-        OrderListAdapter orderList = new OrderListAdapter(this);
+        OrderListAdapter orderList = new OrderListAdapter();
         orderList.addData(createListOrder());
         RecyclerView recyclerView = findViewById(R.id.orderList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -120,10 +120,5 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String date = dayOfMonth + "/" + month + "/" + year;
         dateVisit.setText(date);
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-
     }
 }

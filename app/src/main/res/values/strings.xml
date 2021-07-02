@@ -17,7 +17,7 @@
     <string name="customer">Khách hàng</string>
     <string name="address">Địa chỉ</string>
     <string name="list_order">Danh Sách Đơn Hàng</string>
-    <string name="day_buy">Ngày mua hàng</string>
+    <string name="date_buy">Ngày mua hàng</string>
     <string name="orderList">Đơn hàng</string>
     <string name="total_per_order">T.Tiền</string>
     <string name="total">Tổng</string>
@@ -30,4 +30,14 @@
     <string name="amount_hint">0</string>
     <string name="accept">Đồng ý</string>
     <string name="close">Đóng</string>
+    <string name="order_information">Thông tin đơn hàng</string>
+    <string name="order_style">Kiểu đơn hàng</string>
+    <string name="money">Thành Tiền</string>
+    <string name="note">Ghi chú</string>
+    <string name="note_hint">Nhập ghi chú</string>
+    <string name="style_order">Đơn Đặt Hàng</string>
+    <string name="describe">Diễn giải</string>
+    <string name="add_item">Thêm Mặt Hàng</string>
+    <string name="buy">Chốt Đơn Hàng</string>
+    <string name="especially_character">*</string>
 </resources>

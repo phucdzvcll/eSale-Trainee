@@ -20,11 +20,6 @@ import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
     private ArrayList<OrderList> orderLists;
-    final OnItemRecyclerViewClick onItemRecyclerViewClick;
-
-    public OrderListAdapter(OnItemRecyclerViewClick onItemRecyclerViewClick) {
-        this.onItemRecyclerViewClick = onItemRecyclerViewClick;
-    }
 
     void addData(List<OrderList> cuss) {
         if (orderLists == null) {
@@ -62,7 +57,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         } else {
             holder.linearLayout.setBackgroundColor(Color.LTGRAY);
         }
-        holder.itemView.setOnClickListener(v -> onItemRecyclerViewClick.onClick(v, position));
     }
 
     @Override
