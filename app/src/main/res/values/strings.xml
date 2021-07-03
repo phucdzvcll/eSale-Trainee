@@ -1,3 +1,44 @@
 <resources>
     <string name="app_name">eSales Trainee</string>
+    <string name="user_name">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="exit">Thoát</string>
+    <string name="about_company">về chúng tôi</string>
+    <string name="eSale_version">eSale Version: 2.0</string>
+    <string name="version_date">Phiên bản ngày:</string>
+    <string name="list_customer">Danh sách khác hàng</string>
+    <string name="username_warning">Vui lòng nhập tên đăng nhập</string>
+    <string name="password_warning">Vui lòng nhập mật khẩu</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="search_hint">Tìm theo mã, tên và địa chỉ</string>
+    <string name="search_add_item_hint">Tìm theo mã và diễn dải có dấu</string>
+    <string name="stt">#</string>
+    <string name="customer">Khách hàng</string>
+    <string name="address">Địa chỉ</string>
+    <string name="list_order">Danh Sách Đơn Hàng</string>
+    <string name="date_buy">Ngày mua hàng</string>
+    <string name="orderList">Đơn hàng</string>
+    <string name="total_per_order">T.Tiền</string>
+    <string name="total">Tổng</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pick_product">Chọn mặt hàng</string>
+    <string name="product">Mặt hàng</string>
+    <string name="price">Giá</string>
+    <string name="amount">Số lượng</string>
+    <string name="amount_hint">0</string>
+    <string name="accept">Đồng ý</string>
+    <string name="close">Đóng</string>
+    <string name="order_information">Thông tin đơn hàng</string>
+    <string name="order_style">Kiểu đơn hàng</string>
+    <string name="money">Thành Tiền</string>
+    <string name="note">Ghi chú</string>
+    <string name="note_hint">Nhập ghi chú</string>
+    <string name="style_order">Đơn Đặt Hàng</string>
+    <string name="describe">Diễn giải</string>
+    <string name="add_item">Thêm Mặt Hàng</string>
+    <string name="buy">Chốt Đơn Hàng</string>
+    <string name="especially_character">*</string>
+    <string name="order">Mua Hàng</string>
 </resources>
