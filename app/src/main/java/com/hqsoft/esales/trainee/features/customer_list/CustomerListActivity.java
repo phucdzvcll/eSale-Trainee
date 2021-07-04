@@ -73,4 +73,8 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
     public void onClick(View view, int position) {
         startActivity(new Intent(this, OrderListActivity.class));
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

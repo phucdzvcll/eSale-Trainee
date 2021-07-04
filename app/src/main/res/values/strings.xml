@@ -9,7 +9,9 @@
     <string name="version_date">Phiên bản ngày:</string>
     <string name="list_customer">Danh sách khách hàng</string>
     <string name="username_warning">Vui lòng nhập tên đăng nhập</string>
+    <string name="username_not_exist">Tài khoản không tồn tại</string>
     <string name="password_warning">Vui lòng nhập mật khẩu</string>
+    <string name="password_not_correct">Mật khẩu không chính xác</string>
     <string name="search">Tìm kiếm</string>
     <string name="search_hint">Tìm theo mã, tên và địa chỉ</string>
     <string name="search_add_item_hint">Tìm theo mã và diễn dải có dấu</string>

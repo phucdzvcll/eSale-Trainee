@@ -17,6 +17,6 @@ public interface SalespersonDAO {
     @Query("DELETE from AR_SALESPERSON")
     void deleteAllSalesperson();
 
-    @Query("Select * from AR_SALESPERSON")
-    List<SalespersonLocalEntity> getListSalesperson();
+    @Query("Select * from AR_SALESPERSON where SlsperID like :SlsperID ")
+    SalespersonLocalEntity getSalesperson(String SlsperID);
 }

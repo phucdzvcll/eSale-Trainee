@@ -9,9 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.CustomerDAO;
+import com.hqsoft.esales.data.database.SalespersonDAO;
 import com.hqsoft.esales.data.entity.CustomerLocalEntity;
+import com.hqsoft.esales.data.mapper.SalespersonLocalMapper;
+import com.hqsoft.esales.data.repository.LoginRepositoryImpl;
+import com.hqsoft.esales.domain.entities.SalesPersonEntity;
+import com.hqsoft.esales.domain.repository.LoginRepository;
+import com.hqsoft.esales.domain.use_cases.LoginUseCase;
+import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.CustomerListActivity;
 
@@ -33,8 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         eventBtnExit();
         getView();
         eventBtnLogin();
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
-        CustomerDAO customerDAO =appDatabase.customerDAO();
     }
 
     private void getView() {
@@ -45,24 +51,45 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void eventBtnLogin() {
-
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+        SalespersonDAO salespersonDAO = appDatabase.salespersonDAO();
+        SalespersonLocalMapper salespersonLocalMapper = new SalespersonLocalMapper();
+        LoginRepository loginRepository = new LoginRepositoryImpl(salespersonDAO, salespersonLocalMapper);
+        LoginUseCase loginUseCase = new LoginUseCase(loginRepository);
         Button btnLogin = findViewById(R.id.buttonLogin);
         btnLogin.setOnClickListener(v -> {
             String userName = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
             if (userName.equals("")) {
                 warningUserName.setVisibility(View.VISIBLE);
+                warningUserName.setText(R.string.username_warning);
+                if (password.equals("")) {
+                    warningPassword.setVisibility(View.VISIBLE);
+                    warningPassword.setText(R.string.password_warning);
+                } else {
+                    warningPassword.setVisibility(View.INVISIBLE);
+                }
             } else {
-                warningUserName.setVisibility(View.INVISIBLE);
-            }
-            if (password.equals("")) {
-                warningPassword.setVisibility(View.VISIBLE);
-            } else {
-                warningPassword.setVisibility(View.INVISIBLE);
-            }
-            if (!userName.equals("") && !password.equals("")) {
-                Intent intent = new Intent(this, CustomerListActivity.class);
-                startActivity(intent);
+                ResultPair<SalesPersonEntity, UseCaseError> resultPair = loginUseCase.execute(new LoginUseCase.Param(userName));
+                SalesPersonEntity success = resultPair.getSuccess();
+                if (success != null) {
+                    warningUserName.setVisibility(View.INVISIBLE);
+                    if(password.equals("")){
+                        warningPassword.setVisibility(View.VISIBLE);
+                        warningPassword.setText(R.string.password_warning);
+                    }
+                    else if (password.equals(success.getPassword())) {
+                        warningPassword.setVisibility(View.INVISIBLE);
+                        Intent intent = new Intent(this, CustomerListActivity.class);
+                        startActivity(intent);
+                    } else {
+                        warningPassword.setVisibility(View.VISIBLE);
+                        warningPassword.setText(R.string.password_not_correct);
+                    }
+                } else {
+                    warningUserName.setVisibility(View.VISIBLE);
+                    warningUserName.setText(R.string.username_not_exist);
+                }
             }
         });
     }
