@@ -11,11 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hqsoft.esales.common_jvm.common.ResultPair;
+import com.hqsoft.esales.data.AppDatabase;
+import com.hqsoft.esales.data.database.SalesOrderDAO;
+import com.hqsoft.esales.data.database.SalesOrderDetDAO;
+import com.hqsoft.esales.data.entity.SalesOrderDetLocalEntity;
+import com.hqsoft.esales.data.mapper.OrderListLocalMapper;
+import com.hqsoft.esales.data.repository.OrderListRepositoryImpl;
+import com.hqsoft.esales.domain.repository.OrderListRepository;
 import com.hqsoft.esales.domain.use_cases.OrderListUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
@@ -93,8 +101,14 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
 
     @Nullable
     private List<SalesOrder> createListOrder() {
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+        SalesOrderDAO salesOrderDAO = appDatabase.salesOrderDAO();
+        SalesOrderDetDAO salesOrderDetDAO = appDatabase.salesOrderDetDAO();
+        List<SalesOrderDetLocalEntity> listSalesOrder2 = salesOrderDetDAO.getListSalesOrder2();
+        OrderListLocalMapper orderListLocalMapper = new OrderListLocalMapper();
+        OrderListRepository orderListRepository = new OrderListRepositoryImpl(salesOrderDAO, orderListLocalMapper);
         OrderListMapper orderListMapper = new OrderListMapper();
-        OrderListUseCase orderListUseCase = new OrderListUseCase();
+        OrderListUseCase orderListUseCase = new OrderListUseCase(orderListRepository);
         ResultPair<OrderListUseCase.Result, UseCaseError> result = orderListUseCase.execute(new UseCaseParam.EmptyParam());
         OrderListUseCase.Result success = result.getSuccess();
         if (success != null) {
@@ -120,7 +134,7 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
         btnAdd.setOnClickListener(v -> {
             DialogFragment dialogFragment = new AddItemPopup();
             FragmentManager fragmentManager = this.getSupportFragmentManager();
-
+            dialogFragment.setCancelable(false);
             dialogFragment.show(fragmentManager, "Dialog");
         });
     }

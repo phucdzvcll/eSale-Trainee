@@ -7,7 +7,7 @@
     <string name="about_company">về chúng tôi</string>
     <string name="eSale_version">eSale Version: 2.0</string>
     <string name="version_date">Phiên bản ngày:</string>
-    <string name="list_customer">Danh sách khác hàng</string>
+    <string name="list_customer">Danh sách khách hàng</string>
     <string name="username_warning">Vui lòng nhập tên đăng nhập</string>
     <string name="password_warning">Vui lòng nhập mật khẩu</string>
     <string name="search">Tìm kiếm</string>

@@ -13,9 +13,9 @@ import android.view.View;
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.CustomerDAO;
-import com.hqsoft.esales.data.database.InventoryDAO;
-import com.hqsoft.esales.data.entity.CustomerLocalEntity;
-import com.hqsoft.esales.data.entity.InventoryLocalEntity;
+import com.hqsoft.esales.data.mapper.CustomerLocalMapper;
+import com.hqsoft.esales.data.repository.CustomerRepositoryImpl;
+import com.hqsoft.esales.domain.repository.CustomerRepository;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.domain.use_cases.CustomerListUseCase;
@@ -37,10 +37,6 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
     }
 
     private void requestData() {
-        AppDatabase db = AppDatabase.getInstance(this);
-        InventoryDAO inventoryDAO = db.inventoryDAO();
-        List<InventoryLocalEntity> listCustomer1 = inventoryDAO.getListInventory();
-        Log.d("hhhhhhhhhhhhhhhhhh",listCustomer1.get(0).getId()+"");
         List<Customer> listCustomer = createListCustomer();
         if (listCustomer != null) {
             customerAdapter.addData(listCustomer);
@@ -58,7 +54,11 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
 
     @Nullable
     List<Customer> createListCustomer() {
-        CustomerListUseCase customerListUseCase = new CustomerListUseCase();
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+        CustomerDAO customerDAO = appDatabase.customerDAO();
+        CustomerLocalMapper customerLocalMapper = new CustomerLocalMapper();
+        CustomerRepository customerRepository = new CustomerRepositoryImpl(customerDAO, customerLocalMapper);
+        CustomerListUseCase customerListUseCase = new CustomerListUseCase(customerRepository);
         ResultPair<CustomerListUseCase.Result, UseCaseError> resultPair = customerListUseCase.execute(new UseCaseParam.EmptyParam());
         CustomerListUseCase.Result success = resultPair.getSuccess();
         CustomerListMapper customerListMapper = new CustomerListMapper();

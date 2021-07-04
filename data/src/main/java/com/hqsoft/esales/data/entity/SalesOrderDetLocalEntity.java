@@ -3,9 +3,9 @@ package com.hqsoft.esales.data.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
 
-@Entity(tableName = "OM_SALESORDDET", primaryKeys = {"OrderNbr", "LineRef"})
+@Entity(tableName = "OM_SALESORDDET", primaryKeys = {"OrderNbr", "LineRef"}, foreignKeys = {@ForeignKey(entity = SalesOrderLocalEntity.class, parentColumns = "OrderNbr", childColumns = "OrderNbr", onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)})
 public class SalesOrderDetLocalEntity {
     @NonNull
     @ColumnInfo(name = "OrderNbr")

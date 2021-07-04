@@ -15,11 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapter.AddItemViewHolder> {
-    private ArrayList<Inventory> inventories = new ArrayList<>();
+    private final ArrayList<Inventory> inventories = new ArrayList<>();
 
 
     void addData(@NonNull List<Inventory> cuss) {
@@ -43,7 +44,7 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
     public void onBindViewHolder(AddItemViewHolder holder, int position) {
         Inventory inventory = inventories.get(position);
         holder.nameItem.setText(inventory.getName());
-        holder.itemPrice.setText(inventory.getPrice());
+        holder.itemPrice.setText(MessageFormat.format("{0}", inventory.getPrice()));
         holder.itemProperty.setText(inventory.getUnit());
         String stt = (position + 1) + "";
         holder.indexItem.setText(stt);

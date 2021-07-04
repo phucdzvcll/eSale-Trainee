@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
-    private ArrayList<SalesOrder> salesOrders = new ArrayList<>();
+    private final ArrayList<SalesOrder> salesOrders = new ArrayList<>();
 
     void addData(@NonNull List<SalesOrder> cuss) {
         salesOrders.clear();
@@ -42,7 +42,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     public void onBindViewHolder(OrderListViewHolder holder, int position) {
         SalesOrder salesOrder = salesOrders.get(position);
 
-        int total = (salesOrder.getOrderQty() * salesOrder.getOrderAmt());
+        double total = (salesOrder.getOrderQty() * salesOrder.getOrderAmt());
         holder.totalPerOrder.setText(MessageFormat.format("{0}", total));
         holder.nameOrder.setText(salesOrder.getOrderNbr());
 

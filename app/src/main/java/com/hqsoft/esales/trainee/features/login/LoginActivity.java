@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hqsoft.esales.data.AppDatabase;
+import com.hqsoft.esales.data.database.CustomerDAO;
+import com.hqsoft.esales.data.entity.CustomerLocalEntity;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.CustomerListActivity;
 
@@ -30,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         eventBtnExit();
         getView();
         eventBtnLogin();
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+        CustomerDAO customerDAO =appDatabase.customerDAO();
     }
 
     private void getView() {

@@ -13,10 +13,16 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import com.hqsoft.esales.common_jvm.common.ResultPair;
+import com.hqsoft.esales.data.AppDatabase;
+import com.hqsoft.esales.data.database.InventoryDAO;
+import com.hqsoft.esales.data.mapper.InventoryLocalMapper;
+import com.hqsoft.esales.data.repository.InventoryRepositoryImpl;
+import com.hqsoft.esales.domain.repository.InventoryRepository;
 import com.hqsoft.esales.domain.use_cases.InventoryListUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
@@ -33,6 +39,9 @@ public class AddItemPopup extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Objects.requireNonNull(getDialog()).setCancelable(true);
+        Objects.requireNonNull(getDialog()).setCanceledOnTouchOutside(true);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         return inflater.inflate(R.layout.fragment_add_item_popup, container, false);
     }
 
@@ -43,8 +52,8 @@ public class AddItemPopup extends DialogFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         requestData();
     }
 
@@ -82,7 +91,11 @@ public class AddItemPopup extends DialogFragment {
     }
 
     private List<Inventory> createListItem() {
-        InventoryListUseCase inventoryListUseCase = new InventoryListUseCase();
+        AppDatabase appDatabase = AppDatabase.getInstance(requireContext());
+        InventoryDAO inventoryDAO = appDatabase.inventoryDAO();
+        InventoryLocalMapper inventoryLocalMapper = new InventoryLocalMapper();
+        InventoryRepository inventoryRepository = new InventoryRepositoryImpl(inventoryDAO, inventoryLocalMapper);
+        InventoryListUseCase inventoryListUseCase = new InventoryListUseCase(inventoryRepository);
         ResultPair<InventoryListUseCase.Result, UseCaseError> result = inventoryListUseCase.execute(new UseCaseParam.EmptyParam());
         InventoryListUseCase.Result success = result.getSuccess();
         if (success != null) {
