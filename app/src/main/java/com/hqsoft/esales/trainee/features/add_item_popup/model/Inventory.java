@@ -17,10 +17,10 @@ public class Inventory {
         return price;
     }
 
-    final String name;
-    final String id;
-    final String unit;
-    final String price;
+    private final String name;
+    private final String id;
+    private final String unit;
+    private final String price;
 
     public Inventory(String name, String id, String unit, String price) {
         this.name = name;

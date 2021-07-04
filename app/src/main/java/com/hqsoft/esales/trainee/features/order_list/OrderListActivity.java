@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,12 +20,11 @@ import com.hqsoft.esales.domain.use_cases.OrderListUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
-import com.hqsoft.esales.trainee.features.order_list.model.OrderList;
+import com.hqsoft.esales.trainee.features.order_list.model.SalesOrder;
 import com.hqsoft.esales.trainee.features.add_item_popup.AddItemPopup;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +48,7 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void requestData() {
-        List<OrderList> listOrder = createListOrder();
+        List<SalesOrder> listOrder = createListOrder();
         if (listOrder != null) {
             orderListAdapter.addData(listOrder);
         } else {
@@ -88,13 +86,13 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void setupRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.orderList);
+        RecyclerView recyclerView = findViewById(R.id.salesOrder);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(orderListAdapter);
     }
 
     @Nullable
-    private List<OrderList> createListOrder() {
+    private List<SalesOrder> createListOrder() {
         OrderListMapper orderListMapper = new OrderListMapper();
         OrderListUseCase orderListUseCase = new OrderListUseCase();
         ResultPair<OrderListUseCase.Result, UseCaseError> result = orderListUseCase.execute(new UseCaseParam.EmptyParam());
@@ -108,9 +106,9 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
 
     private void totalPrice() {
         int total = 0;
-        List<OrderList> orderLists = createListOrder();
-        for (int i = 0; i < Objects.requireNonNull(orderLists).size(); i++) {
-            total += orderLists.get(i).getOrderQty() * orderLists.get(i).getOrderAmt();
+        List<SalesOrder> salesOrders = createListOrder();
+        for (int i = 0; i < Objects.requireNonNull(salesOrders).size(); i++) {
+            total += salesOrders.get(i).getOrderQty() * salesOrders.get(i).getOrderAmt();
         }
         TextView totalPrice = findViewById(R.id.total);
         totalPrice.setText(MessageFormat.format("{0}", total));

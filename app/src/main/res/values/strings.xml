@@ -18,7 +18,7 @@
     <string name="address">Địa chỉ</string>
     <string name="list_order">Danh Sách Đơn Hàng</string>
     <string name="date_buy">Ngày mua hàng</string>
-    <string name="orderList">Đơn hàng</string>
+    <string name="salesOrder">Đơn hàng</string>
     <string name="total_per_order">T.Tiền</string>
     <string name="total">Tổng</string>
     <!-- TODO: Remove or change this placeholder text -->

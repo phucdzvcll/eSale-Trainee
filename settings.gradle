@@ -2,3 +2,4 @@ rootProject.name = "eSales Trainee"
 include ':app'
 include ':common_jvm'
 include ':domain'
+include ':data'

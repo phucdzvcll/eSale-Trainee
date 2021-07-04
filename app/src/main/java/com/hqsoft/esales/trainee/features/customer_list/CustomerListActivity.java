@@ -7,9 +7,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.hqsoft.esales.common_jvm.common.ResultPair;
+import com.hqsoft.esales.data.AppDatabase;
+import com.hqsoft.esales.data.database.CustomerDAO;
+import com.hqsoft.esales.data.database.InventoryDAO;
+import com.hqsoft.esales.data.entity.CustomerLocalEntity;
+import com.hqsoft.esales.data.entity.InventoryLocalEntity;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.domain.use_cases.CustomerListUseCase;
@@ -31,6 +37,10 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
     }
 
     private void requestData() {
+        AppDatabase db = AppDatabase.getInstance(this);
+        InventoryDAO inventoryDAO = db.inventoryDAO();
+        List<InventoryLocalEntity> listCustomer1 = inventoryDAO.getListInventory();
+        Log.d("hhhhhhhhhhhhhhhhhh",listCustomer1.get(0).getId()+"");
         List<Customer> listCustomer = createListCustomer();
         if (listCustomer != null) {
             customerAdapter.addData(listCustomer);

@@ -17,6 +17,7 @@ public class CustomerListUseCase extends UseCase<UseCaseParam.EmptyParam, Custom
     @Override
     protected ResultPair<Result, UseCaseError> executeInternal(UseCaseParam.EmptyParam emptyParam) {
         Result result = new Result(createListCustomer());
+
         return new ResultPair<>(result, null);
     }
 
