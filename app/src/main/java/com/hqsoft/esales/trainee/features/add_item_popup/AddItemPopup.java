@@ -28,6 +28,7 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
+import com.hqsoft.esales.trainee.features.model.InventorySelected;
 import com.hqsoft.esales.trainee.features.order.OrderActivity;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
@@ -143,7 +144,7 @@ public class AddItemPopup extends DialogFragment {
         return R.style.DialogTheme;
     }
 
-    public void addListInventoriesSelected(ArrayList<AddItemPopupAdapter.InventorySelected> inventorySelected) {
+    public void addListInventoriesSelected(ArrayList<InventorySelected> inventorySelected) {
         addItemPopupAdapter.addListInventoriesSelected(inventorySelected);
     }
 

@@ -2,8 +2,6 @@ package com.hqsoft.esales.trainee.features.add_item_popup;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
+import com.hqsoft.esales.trainee.features.model.InventorySelected;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         return inventoriesSelected;
     }
 
-    void addListInventoriesSelected(List<InventorySelected> inSelected){
+    void addListInventoriesSelected(List<InventorySelected> inSelected) {
         inventoriesSelected.clear();
         inventoriesSelected.addAll(inSelected);
     }
@@ -61,7 +60,7 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         holder.itemPrice.setText(MessageFormat.format("{0}", inventory.getPrice()));
         holder.itemProperty.setText(inventory.getUnit());
         String stt = (position + 1) + "";
-        setUpInventoryAmount(inventory.getId(),holder.itemAmount);
+        setUpInventoryAmount(inventory.getId(), holder.itemAmount);
         holder.itemAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -73,19 +72,17 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
                 if (s.length() != 0) {
                     int exitsIndex = -1;
                     for (int i = 0; i < inventoriesSelected.size(); i++) {
-                        if (inventoriesSelected.get(i).inventory.getId().equals(inventory.getId())) {
+                        if (inventoriesSelected.get(i).getInventory().getId().equals(inventory.getId())) {
                             exitsIndex = i;
                             break;
                         }
                     }
                     if (exitsIndex > -1) {
                         InventorySelected newInventory = new InventorySelected(inventoriesSelected.get(exitsIndex).getInventory(), Integer.parseInt(s.toString()));
-                        inventoriesSelected.set(exitsIndex,newInventory);
+                        inventoriesSelected.set(exitsIndex, newInventory);
                     } else {
                         inventoriesSelected.add(new InventorySelected(inventory, Integer.parseInt(s.toString())));
                     }
-
-                    Log.d("hhhhhhhh", s.toString());
                 }
             }
 
@@ -102,10 +99,10 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         }
     }
 
-    private void setUpInventoryAmount(String id,EditText itemAmount) {
-        if(inventoriesSelected.size() > 0){
-            for (int i = 0;i<inventoriesSelected.size();i++){
-                if(inventoriesSelected.get(i).inventory.getId().equals(id)){
+    private void setUpInventoryAmount(String id, EditText itemAmount) {
+        if (inventoriesSelected.size() > 0) {
+            for (int i = 0; i < inventoriesSelected.size(); i++) {
+                if (inventoriesSelected.get(i).getInventory().getId().equals(id)) {
                     itemAmount.setText(MessageFormat.format("{0}", inventoriesSelected.get(i).getAmount()));
                     break;
                 }
@@ -135,52 +132,6 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
             this.itemPrice = itemView.findViewById(R.id.itemPrice);
             this.itemAmount = itemView.findViewById(R.id.itemAmount);
             this.linearLayout = itemView.findViewById(R.id.itemAddPopup);
-        }
-    }
-
-    public static class InventorySelected implements Parcelable {
-        private final Inventory inventory;
-        private final int amount;
-
-        protected InventorySelected(Parcel in) {
-            inventory = in.readParcelable(Inventory.class.getClassLoader());
-            amount = in.readInt();
-        }
-
-        public static final Creator<InventorySelected> CREATOR = new Creator<InventorySelected>() {
-            @Override
-            public InventorySelected createFromParcel(Parcel in) {
-                return new InventorySelected(in);
-            }
-
-            @Override
-            public InventorySelected[] newArray(int size) {
-                return new InventorySelected[size];
-            }
-        };
-
-        public Inventory getInventory() {
-            return inventory;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        public InventorySelected(Inventory inventory, int amount) {
-            this.inventory = inventory;
-            this.amount = amount;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeParcelable(inventory, flags);
-            dest.writeInt(amount);
         }
     }
 }
