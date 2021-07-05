@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,11 +15,14 @@ import android.widget.Toast;
 
 import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.SalesOrderDAO;
+import com.hqsoft.esales.data.database.SalesOrderDetDAO;
+import com.hqsoft.esales.data.entity.SalesOrderDetLocalEntity;
+import com.hqsoft.esales.data.mapper.SalesOrderDeMapper;
 import com.hqsoft.esales.data.mapper.SalesOrderEntityMapper;
 import com.hqsoft.esales.data.repository.SaveToSalesOrderRepositoryImpl;
-import com.hqsoft.esales.domain.entities.SalesOrderEntity;
+import com.hqsoft.esales.domain.entities.OrderEntity;
 import com.hqsoft.esales.domain.repository.SaveToSalesOrdRepository;
-import com.hqsoft.esales.domain.use_cases.SaveToSalesOrdUseCase;
+import com.hqsoft.esales.domain.use_cases.SaveOderUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.AddItemPopup;
 import com.hqsoft.esales.trainee.features.model.InventorySelected;
@@ -27,7 +30,6 @@ import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,8 +40,7 @@ public class OrderActivity extends AppCompatActivity {
     private EditText remark;
     private double orderAmt = 0;
     private int orderQty = 0;
-    public static String ACTION_KEY = "ok";
-    private boolean isHaveAction = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,26 +81,28 @@ public class OrderActivity extends AppCompatActivity {
         String customerId = bundle.getString(OrderListActivity.KEY_CUSTOMER);
         btnBuy.setOnClickListener(v -> {
             if (slsperId != null && customerId != null && orderQty > 0) {
+                OrderDetMapper orderDetMapper = new OrderDetMapper();
                 AppDatabase appDatabase = AppDatabase.getInstance(this);
                 SalesOrderDAO salesOrderDAO = appDatabase.salesOrderDAO();
+                SalesOrderDetDAO salesOrderDetDAO = appDatabase.salesOrderDetDAO();
                 SalesOrderEntityMapper salesOrderEntityMapper = new SalesOrderEntityMapper();
-                SaveToSalesOrdRepository saveToSalesOrdRepository = new SaveToSalesOrderRepositoryImpl(salesOrderDAO, salesOrderEntityMapper);
-                SaveToSalesOrdUseCase saveToSalesOrdUseCase = new SaveToSalesOrdUseCase(saveToSalesOrdRepository);
-                String orderNbr = customerId + randomTime();
-                saveToSalesOrdUseCase.execute(new SalesOrderEntity(orderNbr, slsperId, customerId, orderAmt, orderQty, remark.getText().toString()));
+                SalesOrderDeMapper salesOrderDeMapper = new SalesOrderDeMapper();
+                SaveToSalesOrdRepository saveToSalesOrdRepository = new SaveToSalesOrderRepositoryImpl(salesOrderDAO, salesOrderDetDAO, salesOrderEntityMapper, salesOrderDeMapper);
+                SaveOderUseCase saveOderUseCase = new SaveOderUseCase(saveToSalesOrdRepository);
+                saveOderUseCase.execute(new SaveOderUseCase.Param(new OrderEntity(
+                        new OrderEntity.SalesOrderEntity(slsperId, customerId, orderAmt, orderQty, remark.getText().toString()), orderDetMapper.mapList(orderAdapter.getListInventoriesSelected()))));
                 Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                 orderAdapter.addData(new ArrayList<>());
+
+                List<SalesOrderDetLocalEntity> listSalesOrder = salesOrderDetDAO.getListSalesOrder();
+                Log.d("hhhhhhhhhhhhhh",listSalesOrder.get(0).getInvtId());
+
             } else if (orderQty <= 0) {
                 Toast.makeText(this, "Vui lòng thêm ít nhất một sản phẩm", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private int randomTime() {
-        Date date = new Date();
-        return (int) date.getTime();
     }
 
     private void setupView() {

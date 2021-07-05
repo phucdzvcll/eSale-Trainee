@@ -21,7 +21,7 @@ import java.util.List;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
     private final ArrayList<InventorySelected> inventoriesSelected = new ArrayList<>();
 
-    ArrayList<InventorySelected> getListInventoriesSelected() {
+    public ArrayList<InventorySelected> getListInventoriesSelected() {
         return inventoriesSelected;
     }
 

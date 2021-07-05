@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface SalesOrderDetDAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert()
     void insertAll(List<SalesOrderDetLocalEntity> salesOrderDetLocalEntities);
 
     @Query("DELETE from OM_SALESORDDET")
