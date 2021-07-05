@@ -39,6 +39,9 @@ import java.util.Objects;
 public class OrderListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TextView dateVisit;
     OrderListAdapter orderListAdapter = new OrderListAdapter();
+    public static String KEY = "key";
+    public static String KEY_SLSPERID = "slsperID";
+    public static String KEY_CUSTOMER = "customer";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +50,14 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
         setupActionBar();
         setupDateVisit();
         setupRecyclerView();
-        requestData();
         totalPrice();
         setupBtnAdd();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestData();
     }
 
     private void requestData() {

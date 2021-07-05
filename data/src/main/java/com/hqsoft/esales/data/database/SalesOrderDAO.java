@@ -14,6 +14,9 @@ public interface SalesOrderDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<SalesOrderLocalEntity> salesOrderLocalEntities);
 
+    @Insert()
+    void insert(SalesOrderLocalEntity salesOrderLocalEntity);
+
     @Query("DELETE from OM_SALESORD")
     void deleteAllSalesOrder();
 

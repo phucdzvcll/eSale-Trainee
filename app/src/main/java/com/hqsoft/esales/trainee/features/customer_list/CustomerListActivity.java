@@ -21,12 +21,14 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.domain.use_cases.CustomerListUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
+import com.hqsoft.esales.trainee.features.login.LoginActivity;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
 import java.util.List;
 
 public class CustomerListActivity extends AppCompatActivity implements OnItemRecyclerViewClick {
     final CustomerAdapter customerAdapter = new CustomerAdapter(this);
+    public static String KEY = "Customer_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,15 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
 
     @Override
     public void onClick(View view, int position) {
-        startActivity(new Intent(this, OrderListActivity.class));
+        Intent intent1 = getIntent();
+        String SlsperID = intent1.getStringExtra(LoginActivity.KEY);
+        Customer customer = customerAdapter.getCustomer(position);
+        Intent intent = new Intent(this, OrderListActivity.class);
+        intent.putExtra(KEY, customer.getCusId());
+        if (SlsperID != null) {
+            intent.putExtra(LoginActivity.KEY, SlsperID);
+        }
+        startActivity(intent);
     }
 
     @Override

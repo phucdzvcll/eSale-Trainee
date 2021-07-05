@@ -28,6 +28,8 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
+import com.hqsoft.esales.trainee.features.customer_list.CustomerListActivity;
+import com.hqsoft.esales.trainee.features.login.LoginActivity;
 import com.hqsoft.esales.trainee.features.model.InventorySelected;
 import com.hqsoft.esales.trainee.features.order.OrderActivity;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
@@ -38,8 +40,10 @@ import java.util.Objects;
 
 public class AddItemPopup extends DialogFragment {
     final Style style;
-    public static String KEY = "key";
     AddItemPopupAdapter addItemPopupAdapter = new AddItemPopupAdapter();
+    public static int RESULT_OK = 0;
+    private Button closeBtn;
+    private Button acceptBtn;
 
     public AddItemPopup(Style style) {
         this.style = style;
@@ -90,7 +94,9 @@ public class AddItemPopup extends DialogFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerView(view);
-        handleBtnDialog(view);
+        acceptBtn = view.findViewById(R.id.btnAccept);
+        closeBtn = view.findViewById(R.id.btnClose);
+        handleBtnDialog();
     }
 
     void setupRecyclerView(View view) {
@@ -115,20 +121,28 @@ public class AddItemPopup extends DialogFragment {
         }
     }
 
-    private void handleBtnDialog(View view) {
-        Button closeBtn = view.findViewById(R.id.btnClose);
-        Button acceptBtn = view.findViewById(R.id.btnAccept);
+    private void handleBtnDialog() {
         closeBtn.setOnClickListener(v -> dismissDialog());
         acceptBtn.setOnClickListener(v -> {
             dismissDialog();
-            if(style.equals(Style.OrderList)){
+            if (style.equals(Style.OrderList)) {
                 dismissDialog();
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(KEY,addItemPopupAdapter.getInventoriesSelected());
+                OrderListActivity customerListActivity = (OrderListActivity) getActivity();
+                Intent intent = Objects.requireNonNull(customerListActivity).getIntent();
+                String slsperId = intent.getStringExtra(LoginActivity.KEY);
+                String customer = intent.getStringExtra(CustomerListActivity.KEY);
+                if (slsperId != null) {
+                    bundle.putString(OrderListActivity.KEY_SLSPERID, slsperId);
+                }
+                if (customer != null) {
+                    bundle.putString(OrderListActivity.KEY_CUSTOMER, customer);
+                }
+                bundle.putParcelableArrayList(OrderListActivity.KEY, addItemPopupAdapter.getInventoriesSelected());
                 startActivity(new Intent(getActivity(), OrderActivity.class).putExtras(bundle));
-            }else{
+            } else {
                 dismissDialog();
-                OrderActivity activity =(OrderActivity) getActivity();
+                OrderActivity activity = (OrderActivity) getActivity();
                 Objects.requireNonNull(activity).setListInventoriesFromAdapter(addItemPopupAdapter.getInventoriesSelected());
             }
         });

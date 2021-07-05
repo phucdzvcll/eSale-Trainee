@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
+    public static String KEY = "username_key";
     private EditText usernameEditText;
     private EditText passwordEditText;
     private TextView warningUserName;
@@ -81,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                     else if (password.equals(success.getPassword())) {
                         warningPassword.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(this, CustomerListActivity.class);
-                        startActivity(intent);
+                        startActivity(intent.putExtra(KEY,userName));
                     } else {
                         warningPassword.setVisibility(View.VISIBLE);
                         warningPassword.setText(R.string.password_not_correct);

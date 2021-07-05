@@ -6,16 +6,28 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hqsoft.esales.data.AppDatabase;
+import com.hqsoft.esales.data.database.SalesOrderDAO;
+import com.hqsoft.esales.data.mapper.SalesOrderEntityMapper;
+import com.hqsoft.esales.data.repository.SaveToSalesOrderRepositoryImpl;
+import com.hqsoft.esales.domain.entities.SalesOrderEntity;
+import com.hqsoft.esales.domain.repository.SaveToSalesOrdRepository;
+import com.hqsoft.esales.domain.use_cases.SaveToSalesOrdUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.AddItemPopup;
 import com.hqsoft.esales.trainee.features.model.InventorySelected;
+import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +35,11 @@ public class OrderActivity extends AppCompatActivity {
     private final OrderAdapter orderAdapter = new OrderAdapter();
     private TextView totalOrderPrice;
     private RecyclerView recyclerView;
-
+    private EditText remark;
+    private double orderAmt = 0;
+    private int orderQty = 0;
+    public static String ACTION_KEY = "ok";
+    private boolean isHaveAction = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +49,7 @@ public class OrderActivity extends AppCompatActivity {
         setupActionBar();
         getInventoriesSelectedFromBundle(bundle);
         eventClickAddMore();
+        eventClickBuy(bundle);
         setupRecyclerView();
 
     }
@@ -44,7 +61,7 @@ public class OrderActivity extends AppCompatActivity {
 
     public void setListInventoriesFromAdapter(ArrayList<InventorySelected> inventories) {
         orderAdapter.addData(inventories);
-        setTotalPrice(inventories);
+        setOrderAmt(inventories);
     }
 
     private void eventClickAddMore() {
@@ -57,25 +74,54 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
+    private void eventClickBuy(Bundle bundle) {
+        Button btnBuy = findViewById(R.id.btnBuy);
+        String slsperId = bundle.getString(OrderListActivity.KEY_SLSPERID);
+        String customerId = bundle.getString(OrderListActivity.KEY_CUSTOMER);
+        btnBuy.setOnClickListener(v -> {
+            if (slsperId != null && customerId != null && orderQty > 0) {
+                AppDatabase appDatabase = AppDatabase.getInstance(this);
+                SalesOrderDAO salesOrderDAO = appDatabase.salesOrderDAO();
+                SalesOrderEntityMapper salesOrderEntityMapper = new SalesOrderEntityMapper();
+                SaveToSalesOrdRepository saveToSalesOrdRepository = new SaveToSalesOrderRepositoryImpl(salesOrderDAO, salesOrderEntityMapper);
+                SaveToSalesOrdUseCase saveToSalesOrdUseCase = new SaveToSalesOrdUseCase(saveToSalesOrdRepository);
+                String orderNbr = customerId + randomTime();
+                saveToSalesOrdUseCase.execute(new SalesOrderEntity(orderNbr, slsperId, customerId, orderAmt, orderQty, remark.getText().toString()));
+                Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                orderAdapter.addData(new ArrayList<>());
+            } else if (orderQty <= 0) {
+                Toast.makeText(this, "Vui lòng thêm ít nhất một sản phẩm", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private int randomTime() {
+        Date date = new Date();
+        return (int) date.getTime();
+    }
+
     private void setupView() {
         totalOrderPrice = findViewById(R.id.totalOrderPrice);
         recyclerView = findViewById(R.id.listOrderItem);
+        remark = findViewById(R.id.remark);
     }
 
-    private void setTotalPrice(List<InventorySelected> inventorySelectedList) {
+    private void setOrderAmt(List<InventorySelected> inventorySelectedList) {
         if (inventorySelectedList.size() > 0) {
-            int price = 0;
             for (int i = 0; i < inventorySelectedList.size(); i++) {
-                price += (inventorySelectedList.get(i).getInventory().getPrice() * inventorySelectedList.get(i).getAmount());
+                orderAmt += (inventorySelectedList.get(i).getInventory().getPrice() * inventorySelectedList.get(i).getAmount());
+                orderQty += inventorySelectedList.get(i).getAmount();
             }
-            totalOrderPrice.setText(MessageFormat.format("{0}", price));
+            totalOrderPrice.setText(MessageFormat.format("{0}", orderAmt));
         }
     }
 
     private void getInventoriesSelectedFromBundle(Bundle bundle) {
         if (bundle != null) {
-            orderAdapter.addData(bundle.getParcelableArrayList(AddItemPopup.KEY));
-            setTotalPrice(bundle.getParcelableArrayList(AddItemPopup.KEY));
+            orderAdapter.addData(bundle.getParcelableArrayList(OrderListActivity.KEY));
+            setOrderAmt(bundle.getParcelableArrayList(OrderListActivity.KEY));
         }
     }
 

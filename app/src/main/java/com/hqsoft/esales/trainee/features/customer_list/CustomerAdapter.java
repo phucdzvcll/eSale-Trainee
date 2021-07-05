@@ -31,6 +31,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         notifyDataSetChanged();
     }
 
+    Customer getCustomer(int position){
+        return customers.get(position);
+    }
+
     @NonNull
     @Override
     public CustomerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
