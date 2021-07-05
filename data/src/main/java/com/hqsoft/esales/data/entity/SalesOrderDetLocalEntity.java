@@ -3,16 +3,15 @@ package com.hqsoft.esales.data.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 
-@Entity(tableName = "OM_SALESORDDET", primaryKeys = {"OrderNbr", "LineRef"}, foreignKeys = {@ForeignKey(entity = SalesOrderLocalEntity.class, parentColumns = "OrderNbr", childColumns = "OrderNbr", onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)})
+@Entity(tableName = "OM_SALESORDDET", primaryKeys = {"OrderNbr", "LineRef"})
 public class SalesOrderDetLocalEntity {
     @NonNull
     @ColumnInfo(name = "OrderNbr")
     final private String orderNbr;
-    @NonNull
     @ColumnInfo(name = "LineRef")
-    final private String lineRef;
+    @NonNull
+    final private int lineRef;
     @ColumnInfo(name = "InvtID")
     final private String invtId;
     @ColumnInfo(name = "LineAmt")
@@ -26,7 +25,7 @@ public class SalesOrderDetLocalEntity {
     }
 
     @NonNull
-    public String getLineRef() {
+    public int getLineRef() {
         return lineRef;
     }
 
@@ -42,7 +41,7 @@ public class SalesOrderDetLocalEntity {
         return lineQty;
     }
 
-    public SalesOrderDetLocalEntity(@NonNull String orderNbr, @NonNull String lineRef, String invtId, double lineAmt, double lineQty) {
+    public SalesOrderDetLocalEntity(@NonNull String orderNbr, @NonNull int lineRef, String invtId, double lineAmt, double lineQty) {
         this.orderNbr = orderNbr;
         this.lineRef = lineRef;
         this.invtId = invtId;

@@ -19,7 +19,4 @@ public interface SalesOrderDetDAO {
 
     @Query("Select * from OM_SALESORDDET")
     List<SalesOrderDetLocalEntity> getListSalesOrder();
-
-    @Query("SELECT * From OM_SALESORDDET as v , OM_SALESORD as b Where v.OrderNbr == b.OrderNbr group by v.OrderNbr")
-    List<SalesOrderDetLocalEntity> getListSalesOrder2();
 }

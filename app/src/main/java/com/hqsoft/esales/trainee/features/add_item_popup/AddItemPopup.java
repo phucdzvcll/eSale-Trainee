@@ -29,12 +29,20 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
 import com.hqsoft.esales.trainee.features.order.OrderActivity;
+import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class AddItemPopup extends DialogFragment {
+    final Style style;
+    public static String KEY = "key";
     AddItemPopupAdapter addItemPopupAdapter = new AddItemPopupAdapter();
+
+    public AddItemPopup(Style style) {
+        this.style = style;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,7 +120,16 @@ public class AddItemPopup extends DialogFragment {
         closeBtn.setOnClickListener(v -> dismissDialog());
         acceptBtn.setOnClickListener(v -> {
             dismissDialog();
-            startActivity(new Intent(getActivity(), OrderActivity.class));
+            if(style.equals(Style.OrderList)){
+                dismissDialog();
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(KEY,addItemPopupAdapter.getInventoriesSelected());
+                startActivity(new Intent(getActivity(), OrderActivity.class).putExtras(bundle));
+            }else{
+                dismissDialog();
+                OrderActivity activity =(OrderActivity) getActivity();
+                Objects.requireNonNull(activity).setListInventoriesFromAdapter(addItemPopupAdapter.getInventoriesSelected());
+            }
         });
 
     }
@@ -126,4 +143,12 @@ public class AddItemPopup extends DialogFragment {
         return R.style.DialogTheme;
     }
 
+    public void addListInventoriesSelected(ArrayList<AddItemPopupAdapter.InventorySelected> inventorySelected) {
+        addItemPopupAdapter.addListInventoriesSelected(inventorySelected);
+    }
+
+    public enum Style {
+        OrderList,
+        Order
+    }
 }

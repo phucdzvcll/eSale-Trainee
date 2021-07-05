@@ -23,7 +23,7 @@ import com.hqsoft.esales.data.entity.SalespersonLocalEntity;
         SalesOrderLocalEntity.class,
         SalespersonLocalEntity.class,
         SalesOrderDetLocalEntity.class,
-}, version = 2)
+}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract CustomerDAO customerDAO();
 

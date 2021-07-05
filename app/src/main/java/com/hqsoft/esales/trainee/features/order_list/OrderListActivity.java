@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.SalesOrderDAO;
-import com.hqsoft.esales.data.database.SalesOrderDetDAO;
-import com.hqsoft.esales.data.entity.SalesOrderDetLocalEntity;
 import com.hqsoft.esales.data.mapper.OrderListLocalMapper;
 import com.hqsoft.esales.data.repository.OrderListRepositoryImpl;
 import com.hqsoft.esales.domain.repository.OrderListRepository;
@@ -103,8 +100,6 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     private List<SalesOrder> createListOrder() {
         AppDatabase appDatabase = AppDatabase.getInstance(this);
         SalesOrderDAO salesOrderDAO = appDatabase.salesOrderDAO();
-        SalesOrderDetDAO salesOrderDetDAO = appDatabase.salesOrderDetDAO();
-        List<SalesOrderDetLocalEntity> listSalesOrder2 = salesOrderDetDAO.getListSalesOrder2();
         OrderListLocalMapper orderListLocalMapper = new OrderListLocalMapper();
         OrderListRepository orderListRepository = new OrderListRepositoryImpl(salesOrderDAO, orderListLocalMapper);
         OrderListMapper orderListMapper = new OrderListMapper();
@@ -132,9 +127,8 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
         ImageView btnAdd = findViewById(R.id.btnAdd);
 
         btnAdd.setOnClickListener(v -> {
-            DialogFragment dialogFragment = new AddItemPopup();
+            DialogFragment dialogFragment = new AddItemPopup(AddItemPopup.Style.OrderList);
             FragmentManager fragmentManager = this.getSupportFragmentManager();
-            dialogFragment.setCancelable(false);
             dialogFragment.show(fragmentManager, "Dialog");
         });
     }
