@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.data.AppDatabase;
-import com.hqsoft.esales.data.database.CustomerDAO;
 import com.hqsoft.esales.data.database.SalespersonDAO;
-import com.hqsoft.esales.data.entity.CustomerLocalEntity;
 import com.hqsoft.esales.data.mapper.SalespersonLocalMapper;
 import com.hqsoft.esales.data.repository.LoginRepositoryImpl;
 import com.hqsoft.esales.domain.entities.SalesPersonEntity;
@@ -80,7 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                         warningPassword.setText(R.string.password_warning);
                     }
                     else if (password.equals(success.getPassword())) {
-                        warningPassword.setVisibility(View.INVISIBLE);
+                        warningPassword.setVisibility(View.GONE);
+                        warningUserName.setVisibility(View.GONE);
                         Intent intent = new Intent(this, CustomerListActivity.class);
                         startActivity(intent.putExtra(KEY,userName));
                     } else {

@@ -93,10 +93,11 @@ public class OrderActivity extends AppCompatActivity {
                         new OrderEntity.SalesOrderEntity(slsperId, customerId, orderAmt, orderQty, remark.getText().toString()), orderDetMapper.mapList(orderAdapter.getListInventoriesSelected()))));
                 Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                 orderAdapter.addData(new ArrayList<>());
-
                 List<SalesOrderDetLocalEntity> listSalesOrder = salesOrderDetDAO.getListSalesOrder();
-                Log.d("hhhhhhhhhhhhhh",listSalesOrder.get(0).getInvtId());
-
+                totalOrderPrice.setText("0");
+                salesOrderDetDAO.getListSalesOrder();
+                remark.setText("");
+                remark.clearFocus();
             } else if (orderQty <= 0) {
                 Toast.makeText(this, "Vui lòng thêm ít nhất một sản phẩm", Toast.LENGTH_SHORT).show();
             } else {
