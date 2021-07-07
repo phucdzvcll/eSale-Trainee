@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,8 @@ import com.hqsoft.esales.domain.use_cases.InventoryListUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
+import com.hqsoft.esales.trainee.features.add_item_popup.viewmodel.PopupViewModel;
+import com.hqsoft.esales.trainee.features.add_item_popup.viewmodel.PopupViewModelFactory;
 import com.hqsoft.esales.trainee.features.customer_list.CustomerListActivity;
 import com.hqsoft.esales.trainee.features.login.LoginActivity;
 import com.hqsoft.esales.trainee.features.model.InventorySelected;
@@ -49,6 +52,7 @@ public class AddItemPopup extends DialogFragment {
     AddItemPopupAdapter addItemPopupAdapter = new AddItemPopupAdapter();
     private Button closeBtn;
     private Button acceptBtn;
+    private PopupViewModel popupViewModel;
 
     public AddItemPopup(Style style) {
         this.style = style;
@@ -70,31 +74,24 @@ public class AddItemPopup extends DialogFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        createPopupViewModel();
+        popupViewModel.getListLiveData().observe(requireActivity(), inventories -> addItemPopupAdapter.addData(inventories));
+    }
+
+    private void createPopupViewModel() {
+        popupViewModel = new ViewModelProvider(requireActivity(), new PopupViewModelFactory(getContext())).get(PopupViewModel.class);
+    }
+
+    @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         requestData();
     }
 
     private void requestData() {
-        createListItem()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<List<Inventory>>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<Inventory> inventories) {
-                        addItemPopupAdapter.addData(inventories);
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        //TODO handle error
-                    }
-                });
+        popupViewModel.requestData();
     }
 
     private void setSizeDialog() {
@@ -121,19 +118,6 @@ public class AddItemPopup extends DialogFragment {
         RecyclerView recyclerView = view.findViewById(R.id.itemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(addItemPopupAdapter);
-    }
-
-    private Single<List<Inventory>> createListItem() {
-        AppDatabase appDatabase = AppDatabase.getInstance(requireContext());
-        InventoryDAO inventoryDAO = appDatabase.inventoryDAO();
-        InventoryLocalMapper inventoryLocalMapper = new InventoryLocalMapper();
-        InventoryRepository inventoryRepository = new InventoryRepositoryImpl(inventoryDAO, inventoryLocalMapper);
-        InventoryListUseCase inventoryListUseCase = new InventoryListUseCase(inventoryRepository);
-        Single<InventoryListUseCase.Result> result = inventoryListUseCase.execute(new UseCaseParam.EmptyParam());
-        InventoryMapper inventoryMapper = new InventoryMapper();
-        return result.flatMap((Function<InventoryListUseCase.Result, SingleSource<List<Inventory>>>) result1 ->
-                Single.just(inventoryMapper.mapList(result1.getInventoryEntities()))
-        );
     }
 
     private void handleBtnDialog() {

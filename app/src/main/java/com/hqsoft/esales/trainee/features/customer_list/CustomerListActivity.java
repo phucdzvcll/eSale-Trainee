@@ -1,73 +1,43 @@
 package com.hqsoft.esales.trainee.features.customer_list;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import com.hqsoft.esales.common_jvm.common.ResultPair;
-import com.hqsoft.esales.data.AppDatabase;
-import com.hqsoft.esales.data.database.CustomerDAO;
-import com.hqsoft.esales.data.mapper.CustomerLocalMapper;
-import com.hqsoft.esales.data.repository.CustomerRepositoryImpl;
-import com.hqsoft.esales.domain.repository.CustomerRepository;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
-import com.hqsoft.esales.domain.use_cases.CustomerListUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
+import com.hqsoft.esales.trainee.features.customer_list.viewmodel.CustomerViewModel;
+import com.hqsoft.esales.trainee.features.customer_list.viewmodel.CustomerViewModelFactory;
 import com.hqsoft.esales.trainee.features.login.LoginActivity;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
-
-import java.util.List;
-import java.util.Objects;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleObserver;
-import io.reactivex.rxjava3.core.SingleSource;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CustomerListActivity extends AppCompatActivity implements OnItemRecyclerViewClick {
     final CustomerAdapter customerAdapter = new CustomerAdapter(this);
     public static String KEY = "Customer_key";
+    private CustomerViewModel customerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
         setupRecyclerView();
+        createCustomerViewModel();
+        customerViewModel.getCuListMutableLiveData().observe(this, customerAdapter::addData);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         requestData();
     }
 
     private void requestData() {
-        Objects.requireNonNull(createListCustomer())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<Customer>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull List<Customer> customers) {
-                        customerAdapter.addData(customers);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        //todo handle error
-                    }
-                });
+        customerViewModel.requestListCustomer();
     }
 
     void setupRecyclerView() {
@@ -77,18 +47,8 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
         recyclerView.setAdapter(customerAdapter);
     }
 
-    @Nullable
-    Single<List<Customer>> createListCustomer() {
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
-        CustomerDAO customerDAO = appDatabase.customerDAO();
-        CustomerLocalMapper customerLocalMapper = new CustomerLocalMapper();
-        CustomerRepository customerRepository = new CustomerRepositoryImpl(customerDAO, customerLocalMapper);
-        CustomerListUseCase customerListUseCase = new CustomerListUseCase(customerRepository);
-        Single<CustomerListUseCase.Result> resultRx = customerListUseCase.execute(new UseCaseParam.EmptyParam());
-        CustomerListMapper customerListMapper = new CustomerListMapper();
-        return resultRx.flatMap((Function<CustomerListUseCase.Result, SingleSource<List<Customer>>>) result ->
-                Single.just(customerListMapper.mapList(result.getCustomerEntityList()))
-        );
+    void createCustomerViewModel() {
+        customerViewModel = new ViewModelProvider(this, new CustomerViewModelFactory(this)).get(CustomerViewModel.class);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.hqsoft.esales.trainee.features.login;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import com.hqsoft.esales.domain.repository.LoginRepository;
 import com.hqsoft.esales.domain.use_cases.LoginUseCase;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.CustomerListActivity;
+import com.hqsoft.esales.trainee.features.login.viewmodel.LoginViewModel;
+import com.hqsoft.esales.trainee.features.login.viewmodel.LoginViewModelFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,15 +40,21 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private TextView warningUserName;
     private TextView warningPassword;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        createLoginViewModel();
         setInformationApp();
         eventBtnExit();
         getView();
         eventBtnLogin();
+    }
+
+    private void createLoginViewModel() {
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(this)).get(LoginViewModel.class);
     }
 
     private void getView() {
@@ -55,15 +65,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void eventBtnLogin() {
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
-        SalespersonDAO salespersonDAO = appDatabase.salespersonDAO();
-        SalespersonLocalMapper salespersonLocalMapper = new SalespersonLocalMapper();
-        LoginRepository loginRepository = new LoginRepositoryImpl(salespersonDAO, salespersonLocalMapper);
-        LoginUseCase loginUseCase = new LoginUseCase(loginRepository);
+
         Button btnLogin = findViewById(R.id.buttonLogin);
         btnLogin.setOnClickListener(v -> {
             String userName = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
+
             if (userName.equals("")) {
                 warningUserName.setVisibility(View.VISIBLE);
                 warningUserName.setText(R.string.username_warning);
@@ -74,42 +81,34 @@ public class LoginActivity extends AppCompatActivity {
                     warningPassword.setVisibility(View.INVISIBLE);
                 }
             } else {
-                Single<SalesPersonEntity> resultRX = loginUseCase.execute(new LoginUseCase.Param(userName));
-                resultRX
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new SingleObserver<SalesPersonEntity>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
+                loginViewModel.requestSales(userName);
+                loginViewModel.getSalesPersonEntityLiveData().observe(this, salesPersonEntity -> {
+                    if (salesPersonEntity != null) {
+                        warningUserName.setVisibility(View.INVISIBLE);
+                        if (password.equals("")) {
+                            warningPassword.setVisibility(View.VISIBLE);
+                            warningPassword.setText(R.string.password_warning);
+                        } else if (password.equals(salesPersonEntity.getPassword())) {
+                            warningPassword.setVisibility(View.INVISIBLE);
+                            warningPassword.setVisibility(View.GONE);
+                            warningUserName.setVisibility(View.GONE);
+                            Intent intent = new Intent(this, CustomerListActivity.class);
+                            startActivity(intent.putExtra(KEY, userName));
+                        } else {
+                            warningPassword.setVisibility(View.VISIBLE);
+                            warningPassword.setText(R.string.password_not_correct);
+                        }
+                    } else {
+                        warningUserName.setVisibility(View.VISIBLE);
+                        warningUserName.setText(R.string.username_not_exist);
+                    }
+                });
 
-                            }
-
-                            @Override
-                            public void onSuccess(@NonNull SalesPersonEntity salesPersonEntity) {
-                                warningUserName.setVisibility(View.INVISIBLE);
-                                if (password.equals("")) {
-                                    warningPassword.setVisibility(View.VISIBLE);
-                                    warningPassword.setText(R.string.password_warning);
-                                } else if (password.equals(salesPersonEntity.getPassword())) {
-                                    warningPassword.setVisibility(View.GONE);
-                                    warningUserName.setVisibility(View.GONE);
-                                    Intent intent = new Intent(v.getContext(), CustomerListActivity.class);
-                                    startActivity(intent.putExtra(KEY, userName));
-                                } else {
-                                    warningPassword.setVisibility(View.VISIBLE);
-                                    warningPassword.setText(R.string.password_not_correct);
-                                }
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                                warningUserName.setVisibility(View.VISIBLE);
-                                warningUserName.setText(R.string.username_not_exist);
-                            }
-                        });
             }
         });
+
     }
+
 
     private void eventBtnExit() {
         Button btnExit = findViewById(R.id.buttonExit);
