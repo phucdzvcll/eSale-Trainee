@@ -13,16 +13,16 @@ public class InventoryEntity {
         return unit;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
     final String name;
     final String id;
     final String unit;
-    final String price;
+    final double price;
 
-    public InventoryEntity(String name, String id, String unit, String price) {
+    public InventoryEntity(String name, String id, String unit, double price) {
         this.name = name;
         this.id = id;
         this.unit = unit;

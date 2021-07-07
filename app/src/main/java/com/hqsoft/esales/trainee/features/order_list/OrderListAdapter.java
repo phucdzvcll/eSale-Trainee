@@ -12,18 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hqsoft.esales.trainee.R;
-import com.hqsoft.esales.trainee.features.order_list.model.OrderList;
+import com.hqsoft.esales.trainee.features.order_list.model.SalesOrder;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
-    private ArrayList<OrderList> orderLists = new ArrayList<>();
+    private final ArrayList<SalesOrder> salesOrders = new ArrayList<>();
 
-    void addData(@NonNull List<OrderList> cuss) {
-        orderLists.clear();
-        orderLists.addAll(cuss);
+    void addData(@NonNull List<SalesOrder> cuss) {
+        salesOrders.clear();
+        salesOrders.addAll(cuss);
         notifyDataSetChanged();
     }
 
@@ -40,11 +40,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public void onBindViewHolder(OrderListViewHolder holder, int position) {
-        OrderList orderList = orderLists.get(position);
+        SalesOrder salesOrder = salesOrders.get(position);
 
-        int total = (orderList.getOrderQty() * orderList.getOrderAmt());
+        double total = (salesOrder.getOrderQty() * salesOrder.getOrderAmt());
         holder.totalPerOrder.setText(MessageFormat.format("{0}", total));
-        holder.nameOrder.setText(orderList.getOrderNbr());
+        holder.nameOrder.setText(salesOrder.getOrderNbr());
 
         String stt = (position + 1) + "";
         holder.indexOrder.setText(stt);
@@ -57,7 +57,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public int getItemCount() {
-        return orderLists.size();
+        return salesOrders.size();
     }
 
 

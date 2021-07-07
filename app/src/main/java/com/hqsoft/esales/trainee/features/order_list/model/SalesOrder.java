@@ -1,6 +1,6 @@
 package com.hqsoft.esales.trainee.features.order_list.model;
 
-public class OrderList {
+public class SalesOrder {
     public String getOrderNbr() {
         return orderNbr;
     }
@@ -13,11 +13,11 @@ public class OrderList {
         return customerId;
     }
 
-    public int getOrderAmt() {
+    public double getOrderAmt() {
         return orderAmt;
     }
 
-    public int getOrderQty() {
+    public double getOrderQty() {
         return orderQty;
     }
 
@@ -29,15 +29,15 @@ public class OrderList {
         return remark;
     }
 
-    final String orderNbr;
-    final String slsperId;
-    final String customerId;
-    final int orderAmt;
-    final int orderQty;
-    final String orderDate;
-    final String remark;
+    private final String orderNbr;
+    private final String slsperId;
+    private final String customerId;
+    private final double orderAmt;
+    private final double orderQty;
+    private final String orderDate;
+    private final String remark;
 
-    public OrderList(String orderNbr, String slsperId, String customerId, int orderAmt, int orderQty, String orderDate, String remark) {
+    public SalesOrder(String orderNbr, String slsperId, String customerId, double orderAmt, double orderQty, String orderDate, String remark) {
         this.orderNbr = orderNbr;
         this.slsperId = slsperId;
         this.customerId = customerId;

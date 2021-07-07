@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.CustomerEntity;
+import com.hqsoft.esales.domain.repository.CustomerRepository;
+import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
@@ -12,75 +14,24 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerListUseCase extends UseCase<UseCaseParam.EmptyParam, CustomerListUseCase.Result> {
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.functions.Function;
 
-    @Override
-    protected ResultPair<Result, UseCaseError> executeInternal(UseCaseParam.EmptyParam emptyParam) {
-        Result result = new Result(createListCustomer());
-        return new ResultPair<>(result, null);
+public class CustomerListUseCase extends RXUseCase<UseCaseParam.EmptyParam, CustomerListUseCase.Result> {
+
+    final CustomerRepository customerRepository;
+
+    public CustomerListUseCase(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
-    List<CustomerEntity> createListCustomer() {
-        ArrayList<CustomerEntity> customers = new ArrayList<>();
-        customers.add(new CustomerEntity("Khách Hàng A", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID1", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng B", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID2", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng C", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID3", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng D", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID4", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        customers.add(new CustomerEntity("Khách Hàng E", "72/24 Phan Đăng Lưu, P5, Phú Nhuận, HCM", "CustID5", "1234567890"));
-        return customers;
+    @Override
+    public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
+        return customerRepository.getListCustomerRX().flatMap((Function<List<CustomerEntity>, SingleSource<Result>>) customerEntities ->
+                Single.just(new Result(customerEntities))
+        );
     }
 
     public static class Result {

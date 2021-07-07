@@ -4,71 +4,32 @@ import androidx.annotation.NonNull;
 
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.OrderListEntity;
+import com.hqsoft.esales.domain.repository.OrderListRepository;
+import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class OrderListUseCase extends UseCase<UseCaseParam.EmptyParam, OrderListUseCase.Result> {
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.functions.Function;
+
+public class OrderListUseCase extends RXUseCase<UseCaseParam.EmptyParam, OrderListUseCase.Result> {
+    final OrderListRepository orderListRepository;
+
+    public OrderListUseCase(OrderListRepository orderListRepository) {
+        this.orderListRepository = orderListRepository;
+    }
 
     @Override
-    protected ResultPair<Result, UseCaseError> executeInternal(UseCaseParam.EmptyParam emptyParam) {
-        OrderListUseCase.Result result = new OrderListUseCase.Result(createListOrder());
-        return new ResultPair<>(result, null);
+    public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
+        return orderListRepository.getOrderList().flatMap((Function<List<OrderListEntity>, SingleSource<Result>>) orderListEntities ->
+                Single.just(new Result(orderListEntities))
+        );
     }
 
-    private List<OrderListEntity> createListOrder() {
-        ArrayList<OrderListEntity> OrderListEntitys = new ArrayList<>();
-        OrderListEntitys.add(new OrderListEntity("Sales10001", "Sales1", "CustId1", 35000, 3, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales10002", "Sales1", "CustId1", 50000, 5, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales20001", "Sales2", "CustId2", 40000, 2, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales30001", "Sales3", "CustId3", 51000, 3, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        OrderListEntitys.add(new OrderListEntity("Sales40001", "Sales4", "CustId4", 128000, 4, "2018-08-09", "Gi chú"));
-        return OrderListEntitys;
-    }
 
     public static class Result {
         @NonNull

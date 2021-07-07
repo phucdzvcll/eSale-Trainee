@@ -13,11 +13,11 @@ public class OrderListEntity {
         return customerId;
     }
 
-    public int getOrderAmt() {
+    public double getOrderAmt() {
         return orderAmt;
     }
 
-    public int getOrderQty() {
+    public double getOrderQty() {
         return orderQty;
     }
 
@@ -32,12 +32,12 @@ public class OrderListEntity {
     final String orderNbr;
     final String slsperId;
     final String customerId;
-    final int orderAmt;
-    final int orderQty;
+    final double orderAmt;
+    final double orderQty;
     final String orderDate;
     final String remark;
 
-    public OrderListEntity(String orderNbr, String slsperId, String customerId, int orderAmt, int orderQty, String orderDate, String remark) {
+    public OrderListEntity(String orderNbr, String slsperId, String customerId, double orderAmt, double orderQty, String orderDate, String remark) {
         this.orderNbr = orderNbr;
         this.slsperId = slsperId;
         this.customerId = customerId;

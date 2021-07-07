@@ -121,7 +121,7 @@
             android:paddingLeft="@dimen/dp_24"
             android:paddingEnd="@dimen/dp_24"
             android:paddingRight="@dimen/dp_24"
-            android:text="@string/orderList"
+            android:text="@string/salesOrder"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -141,7 +141,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/orderList"
+        android:id="@+id/salesOrder"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"

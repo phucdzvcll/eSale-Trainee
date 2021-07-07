@@ -2,6 +2,9 @@ package com.hqsoft.esales.trainee.features.add_item_popup;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +17,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
+import com.hqsoft.esales.trainee.features.model.InventorySelected;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapter.AddItemViewHolder> {
-    private ArrayList<Inventory> inventories = new ArrayList<>();
-
+    private final ArrayList<Inventory> inventories = new ArrayList<>();
+    private final ArrayList<InventorySelected> inventoriesSelected = new ArrayList<>();
 
     void addData(@NonNull List<Inventory> cuss) {
         inventories.clear();
         inventories.addAll(cuss);
         notifyDataSetChanged();
+    }
+
+    public ArrayList<InventorySelected> getInventoriesSelected() {
+        return inventoriesSelected;
+    }
+
+    void addListInventoriesSelected(List<InventorySelected> inSelected) {
+        inventoriesSelected.clear();
+        inventoriesSelected.addAll(inSelected);
     }
 
     @NonNull
@@ -43,14 +57,56 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
     public void onBindViewHolder(AddItemViewHolder holder, int position) {
         Inventory inventory = inventories.get(position);
         holder.nameItem.setText(inventory.getName());
-        holder.itemPrice.setText(inventory.getPrice());
+        holder.itemPrice.setText(MessageFormat.format("{0}", inventory.getPrice()));
         holder.itemProperty.setText(inventory.getUnit());
         String stt = (position + 1) + "";
+        setUpInventoryAmount(inventory.getId(), holder.itemAmount);
+        holder.itemAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    int exitsIndex = -1;
+                    for (int i = 0; i < inventoriesSelected.size(); i++) {
+                        if (inventoriesSelected.get(i).getInventory().getId().equals(inventory.getId())) {
+                            exitsIndex = i;
+                            break;
+                        }
+                    }
+                    if (exitsIndex > -1) {
+                        InventorySelected newInventory = new InventorySelected(inventoriesSelected.get(exitsIndex).getInventory(), Integer.parseInt(s.toString()));
+                        inventoriesSelected.set(exitsIndex, newInventory);
+                    } else {
+                        inventoriesSelected.add(new InventorySelected(inventory, Integer.parseInt(s.toString())));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         holder.indexItem.setText(stt);
         if (position % 2 == 0) {
             holder.linearLayout.setBackgroundColor(Color.WHITE);
         } else {
             holder.linearLayout.setBackgroundColor(Color.LTGRAY);
+        }
+    }
+
+    private void setUpInventoryAmount(String id, EditText itemAmount) {
+        if (inventoriesSelected.size() > 0) {
+            for (int i = 0; i < inventoriesSelected.size(); i++) {
+                if (inventoriesSelected.get(i).getInventory().getId().equals(id)) {
+                    itemAmount.setText(MessageFormat.format("{0}", inventoriesSelected.get(i).getAmount()));
+                    break;
+                }
+            }
         }
     }
 
