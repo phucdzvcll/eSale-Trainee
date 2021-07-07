@@ -1,13 +1,13 @@
 package com.hqsoft.esales.domain.use_cases;
 
-import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.OrderEntity;
 import com.hqsoft.esales.domain.repository.SaveToSalesOrdRepository;
-import com.hqsoft.esales.domain.use_cases.base.UseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
+import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 
-public class SaveOderUseCase extends UseCase<SaveOderUseCase.Param, SaveOderUseCase.Result> {
+import io.reactivex.rxjava3.core.Single;
+
+public class SaveOderUseCase extends RXUseCase<SaveOderUseCase.Param, SaveOderUseCase.Result> {
     final SaveToSalesOrdRepository repository;
 
     public SaveOderUseCase(SaveToSalesOrdRepository repository) {
@@ -15,9 +15,8 @@ public class SaveOderUseCase extends UseCase<SaveOderUseCase.Param, SaveOderUseC
     }
 
     @Override
-    protected ResultPair<Result, UseCaseError> executeInternal(Param param) {
-        Result result = repository.saveToSalesOrder(param.orderEntity);
-        return new ResultPair<>(result,null);
+    public Single<Result> execute(Param param) {
+        return repository.saveToSalesOrder(param.getOrderEntity());
     }
 
     public static class Result {

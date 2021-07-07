@@ -1,10 +1,11 @@
 package com.hqsoft.esales.data.repository;
 
 import com.hqsoft.esales.data.database.SalespersonDAO;
-import com.hqsoft.esales.data.entity.SalespersonLocalEntity;
 import com.hqsoft.esales.data.mapper.SalespersonLocalMapper;
 import com.hqsoft.esales.domain.entities.SalesPersonEntity;
 import com.hqsoft.esales.domain.repository.LoginRepository;
+
+import io.reactivex.rxjava3.core.Single;
 
 public class LoginRepositoryImpl implements LoginRepository {
     final SalespersonDAO salespersonDAO;
@@ -16,8 +17,9 @@ public class LoginRepositoryImpl implements LoginRepository {
     }
 
     @Override
-    public SalesPersonEntity getSalesEntity(String slsperId) {
-        SalespersonLocalEntity salespersonLocal = salespersonDAO.getSalesperson(slsperId);
-        return salespersonLocalMapper.map(salespersonLocal);
+    public Single<SalesPersonEntity> getSalesEntityRX(String slsperId) {
+        return Single.create(emitter ->
+                emitter.onSuccess(salespersonLocalMapper.map(salespersonDAO.getSalesperson(slsperId)))
+        );
     }
 }

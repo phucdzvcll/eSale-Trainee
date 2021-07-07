@@ -25,6 +25,16 @@ import com.hqsoft.esales.trainee.features.login.LoginActivity;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
 import java.util.List;
+import java.util.Objects;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CustomerListActivity extends AppCompatActivity implements OnItemRecyclerViewClick {
     final CustomerAdapter customerAdapter = new CustomerAdapter(this);
@@ -39,12 +49,25 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
     }
 
     private void requestData() {
-        List<Customer> listCustomer = createListCustomer();
-        if (listCustomer != null) {
-            customerAdapter.addData(listCustomer);
-        } else {
-            //todo handle error case
-        }
+        Objects.requireNonNull(createListCustomer())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<Customer>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<Customer> customers) {
+                        customerAdapter.addData(customers);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        //todo handle error
+                    }
+                });
     }
 
     void setupRecyclerView() {
@@ -55,20 +78,17 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
     }
 
     @Nullable
-    List<Customer> createListCustomer() {
+    Single<List<Customer>> createListCustomer() {
         AppDatabase appDatabase = AppDatabase.getInstance(this);
         CustomerDAO customerDAO = appDatabase.customerDAO();
         CustomerLocalMapper customerLocalMapper = new CustomerLocalMapper();
         CustomerRepository customerRepository = new CustomerRepositoryImpl(customerDAO, customerLocalMapper);
         CustomerListUseCase customerListUseCase = new CustomerListUseCase(customerRepository);
-        ResultPair<CustomerListUseCase.Result, UseCaseError> resultPair = customerListUseCase.execute(new UseCaseParam.EmptyParam());
-        CustomerListUseCase.Result success = resultPair.getSuccess();
+        Single<CustomerListUseCase.Result> resultRx = customerListUseCase.execute(new UseCaseParam.EmptyParam());
         CustomerListMapper customerListMapper = new CustomerListMapper();
-        if (success != null) {
-            return customerListMapper.mapList(success.getCustomerEntityList());
-        } else {
-            return null;
-        }
+        return resultRx.flatMap((Function<CustomerListUseCase.Result, SingleSource<List<Customer>>>) result ->
+                Single.just(customerListMapper.mapList(result.getCustomerEntityList()))
+        );
     }
 
     @Override

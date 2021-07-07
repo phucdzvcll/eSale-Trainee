@@ -93,7 +93,6 @@ public class OrderActivity extends AppCompatActivity {
                         new OrderEntity.SalesOrderEntity(slsperId, customerId, orderAmt, orderQty, remark.getText().toString()), orderDetMapper.mapList(orderAdapter.getListInventoriesSelected()))));
                 Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                 orderAdapter.addData(new ArrayList<>());
-                List<SalesOrderDetLocalEntity> listSalesOrder = salesOrderDetDAO.getListSalesOrder();
                 totalOrderPrice.setText("0");
                 salesOrderDetDAO.getListSalesOrder();
                 remark.setText("");

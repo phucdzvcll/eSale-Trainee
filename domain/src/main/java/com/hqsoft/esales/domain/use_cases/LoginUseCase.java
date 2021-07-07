@@ -1,13 +1,13 @@
 package com.hqsoft.esales.domain.use_cases;
 
-import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.SalesPersonEntity;
 import com.hqsoft.esales.domain.repository.LoginRepository;
-import com.hqsoft.esales.domain.use_cases.base.UseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
+import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 
-public class LoginUseCase extends UseCase<LoginUseCase.Param, SalesPersonEntity> {
+import io.reactivex.rxjava3.core.Single;
+
+public class LoginUseCase extends RXUseCase<LoginUseCase.Param, SalesPersonEntity> {
     final LoginRepository loginRepository;
 
     public LoginUseCase(LoginRepository loginRepository) {
@@ -15,8 +15,8 @@ public class LoginUseCase extends UseCase<LoginUseCase.Param, SalesPersonEntity>
     }
 
     @Override
-    protected ResultPair<SalesPersonEntity, UseCaseError> executeInternal(Param param) {
-        return new ResultPair<>(loginRepository.getSalesEntity(param.getParam()), null);
+    public Single<SalesPersonEntity> execute(Param param) {
+        return loginRepository.getSalesEntityRX(param.getParam());
     }
 
     public final static class Param implements UseCaseParam {

@@ -1,6 +1,6 @@
 package com.hqsoft.esales.trainee.features.order_list;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -15,14 +15,12 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.SalesOrderDAO;
 import com.hqsoft.esales.data.mapper.OrderListLocalMapper;
 import com.hqsoft.esales.data.repository.OrderListRepositoryImpl;
 import com.hqsoft.esales.domain.repository.OrderListRepository;
 import com.hqsoft.esales.domain.use_cases.OrderListUseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.order_list.model.SalesOrder;
@@ -35,6 +33,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TextView dateVisit;
@@ -61,12 +67,25 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void requestData() {
-        List<SalesOrder> listOrder = createListOrder();
-        if (listOrder != null) {
-            orderListAdapter.addData(listOrder);
-        } else {
-            //todo handle error case
-        }
+        createListOrder()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<List<SalesOrder>>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<SalesOrder> salesOrders) {
+                        orderListAdapter.addData(salesOrders);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        //TODO handle error
+                    }
+                });
     }
 
     private void setupActionBar() {
@@ -104,31 +123,42 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
         recyclerView.setAdapter(orderListAdapter);
     }
 
-    @Nullable
-    private List<SalesOrder> createListOrder() {
+    @NonNull
+    private Single<List<SalesOrder>> createListOrder() {
         AppDatabase appDatabase = AppDatabase.getInstance(this);
         SalesOrderDAO salesOrderDAO = appDatabase.salesOrderDAO();
         OrderListLocalMapper orderListLocalMapper = new OrderListLocalMapper();
         OrderListRepository orderListRepository = new OrderListRepositoryImpl(salesOrderDAO, orderListLocalMapper);
         OrderListMapper orderListMapper = new OrderListMapper();
         OrderListUseCase orderListUseCase = new OrderListUseCase(orderListRepository);
-        ResultPair<OrderListUseCase.Result, UseCaseError> result = orderListUseCase.execute(new UseCaseParam.EmptyParam());
-        OrderListUseCase.Result success = result.getSuccess();
-        if (success != null) {
-            return orderListMapper.mapList(success.getCustomerEntityList());
-        } else {
-            return null;
-        }
+        Single<OrderListUseCase.Result> result = orderListUseCase.execute(new UseCaseParam.EmptyParam());
+        return result.flatMap((Function<OrderListUseCase.Result, SingleSource<List<SalesOrder>>>) result1 ->
+                Single.just(orderListMapper.mapList(result1.getCustomerEntityList()))
+        );
     }
 
     private void totalPrice() {
-        int total = 0;
-        List<SalesOrder> salesOrders = createListOrder();
-        for (int i = 0; i < Objects.requireNonNull(salesOrders).size(); i++) {
-            total += salesOrders.get(i).getOrderQty() * salesOrders.get(i).getOrderAmt();
-        }
-        TextView totalPrice = findViewById(R.id.total);
-        totalPrice.setText(MessageFormat.format("{0}", total));
+        createListOrder().subscribe(new SingleObserver<List<SalesOrder>>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+            }
+
+            @Override
+            public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<SalesOrder> salesOrders) {
+                int total = 0;
+                for (int i = 0; i < Objects.requireNonNull(salesOrders).size(); i++) {
+                    total += salesOrders.get(i).getOrderQty() * salesOrders.get(i).getOrderAmt();
+                }
+                TextView totalPrice = findViewById(R.id.total);
+                totalPrice.setText(MessageFormat.format("{0}", total));
+            }
+
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                //TODO handle error
+            }
+        });
+
     }
 
     private void setupBtnAdd() {

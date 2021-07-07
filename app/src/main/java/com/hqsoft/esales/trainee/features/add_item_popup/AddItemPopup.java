@@ -17,14 +17,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.InventoryDAO;
 import com.hqsoft.esales.data.mapper.InventoryLocalMapper;
 import com.hqsoft.esales.data.repository.InventoryRepositoryImpl;
 import com.hqsoft.esales.domain.repository.InventoryRepository;
 import com.hqsoft.esales.domain.use_cases.InventoryListUseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
@@ -38,10 +36,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class AddItemPopup extends DialogFragment {
     final Style style;
     AddItemPopupAdapter addItemPopupAdapter = new AddItemPopupAdapter();
-    public static int RESULT_OK = 0;
     private Button closeBtn;
     private Button acceptBtn;
 
@@ -71,12 +76,25 @@ public class AddItemPopup extends DialogFragment {
     }
 
     private void requestData() {
-        List<Inventory> listItem = createListItem();
-        if (listItem != null) {
-            addItemPopupAdapter.addData(listItem);
-        } else {
-            //todo handle error case
-        }
+        createListItem()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<List<Inventory>>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull List<Inventory> inventories) {
+                        addItemPopupAdapter.addData(inventories);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        //TODO handle error
+                    }
+                });
     }
 
     private void setSizeDialog() {
@@ -105,20 +123,17 @@ public class AddItemPopup extends DialogFragment {
         recyclerView.setAdapter(addItemPopupAdapter);
     }
 
-    private List<Inventory> createListItem() {
+    private Single<List<Inventory>> createListItem() {
         AppDatabase appDatabase = AppDatabase.getInstance(requireContext());
         InventoryDAO inventoryDAO = appDatabase.inventoryDAO();
         InventoryLocalMapper inventoryLocalMapper = new InventoryLocalMapper();
         InventoryRepository inventoryRepository = new InventoryRepositoryImpl(inventoryDAO, inventoryLocalMapper);
         InventoryListUseCase inventoryListUseCase = new InventoryListUseCase(inventoryRepository);
-        ResultPair<InventoryListUseCase.Result, UseCaseError> result = inventoryListUseCase.execute(new UseCaseParam.EmptyParam());
-        InventoryListUseCase.Result success = result.getSuccess();
-        if (success != null) {
-            InventoryMapper inventoryMapper = new InventoryMapper();
-            return inventoryMapper.mapList(success.getInventoryEntities());
-        } else {
-            return null;
-        }
+        Single<InventoryListUseCase.Result> result = inventoryListUseCase.execute(new UseCaseParam.EmptyParam());
+        InventoryMapper inventoryMapper = new InventoryMapper();
+        return result.flatMap((Function<InventoryListUseCase.Result, SingleSource<List<Inventory>>>) result1 ->
+                Single.just(inventoryMapper.mapList(result1.getInventoryEntities()))
+        );
     }
 
     private void handleBtnDialog() {

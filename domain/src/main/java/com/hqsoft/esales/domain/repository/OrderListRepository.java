@@ -4,6 +4,8 @@ import com.hqsoft.esales.domain.entities.OrderListEntity;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Single;
+
 public interface OrderListRepository {
-    List<OrderListEntity> getOrderList();
+    Single<List<OrderListEntity>> getOrderList();
 }

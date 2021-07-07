@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public abstract class RXUseCase<Params extends UseCaseParam, Result> {
 
-    protected abstract Single<Result> execute(Params params);
+    public abstract Single<Result> execute(Params params);
 
 }

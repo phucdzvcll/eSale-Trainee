@@ -1,13 +1,13 @@
 package com.hqsoft.esales.data.repository;
 
 import com.hqsoft.esales.data.database.CustomerDAO;
-import com.hqsoft.esales.data.entity.CustomerLocalEntity;
 import com.hqsoft.esales.data.mapper.CustomerLocalMapper;
 import com.hqsoft.esales.domain.entities.CustomerEntity;
 import com.hqsoft.esales.domain.repository.CustomerRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Single;
 
 public class CustomerRepositoryImpl implements CustomerRepository {
     final CustomerDAO customerDAO;
@@ -19,8 +19,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public List<CustomerEntity> getListCustomer() {
-        List<CustomerLocalEntity> listLocalCustomer = customerDAO.getListCustomer();
-        return customerLocalMapper.mapList(listLocalCustomer);
+    public Single<List<CustomerEntity>> getListCustomerRX() {
+        return Single.create(emitter ->
+                emitter.onSuccess(customerLocalMapper.mapList(customerDAO.getListCustomer()))
+        );
     }
 }

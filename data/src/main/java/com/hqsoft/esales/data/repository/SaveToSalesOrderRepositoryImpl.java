@@ -12,6 +12,8 @@ import com.hqsoft.esales.domain.use_cases.SaveOderUseCase;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Single;
+
 public class SaveToSalesOrderRepositoryImpl implements SaveToSalesOrdRepository {
     final SalesOrderDAO salesOrderDAO;
     final SalesOrderDetDAO salesOrderDetDAO;
@@ -26,11 +28,11 @@ public class SaveToSalesOrderRepositoryImpl implements SaveToSalesOrdRepository 
     }
 
     @Override
-    public SaveOderUseCase.Result saveToSalesOrder(OrderEntity orderEntity) {
+    public Single<SaveOderUseCase.Result> saveToSalesOrder(OrderEntity orderEntity) {
         SalesOrderLocalEntity salesOrderLocalEntity = salesOrderEntityMapper.map(orderEntity.getSalesOrderEntity());
         List<SalesOrderDetLocalEntity> salesOrderDetLocalEntityList = salesOrderDeMapper.mapList(orderEntity.getOrderDetEntityList(), salesOrderLocalEntity.getOrderNbr());
         salesOrderDAO.insert(salesOrderLocalEntity);
         salesOrderDetDAO.insertAll(salesOrderDetLocalEntityList);
-        return new SaveOderUseCase.Result();
+        return Single.create(emitter -> emitter.onSuccess(new SaveOderUseCase.Result()));
     }
 }

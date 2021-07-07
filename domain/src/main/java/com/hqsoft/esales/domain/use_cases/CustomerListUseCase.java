@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.CustomerEntity;
 import com.hqsoft.esales.domain.repository.CustomerRepository;
+import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
@@ -13,7 +14,12 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerListUseCase extends UseCase<UseCaseParam.EmptyParam, CustomerListUseCase.Result> {
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.functions.Function;
+
+public class CustomerListUseCase extends RXUseCase<UseCaseParam.EmptyParam, CustomerListUseCase.Result> {
 
     final CustomerRepository customerRepository;
 
@@ -21,12 +27,11 @@ public class CustomerListUseCase extends UseCase<UseCaseParam.EmptyParam, Custom
         this.customerRepository = customerRepository;
     }
 
-
     @Override
-    protected ResultPair<Result, UseCaseError> executeInternal(UseCaseParam.EmptyParam emptyParam) {
-        Result result = new Result(customerRepository.getListCustomer());
-
-        return new ResultPair<>(result, null);
+    public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
+        return customerRepository.getListCustomerRX().flatMap((Function<List<CustomerEntity>, SingleSource<Result>>) customerEntities ->
+                Single.just(new Result(customerEntities))
+        );
     }
 
     public static class Result {

@@ -1,7 +1,5 @@
 package com.hqsoft.esales.data.repository;
 
-import android.util.Log;
-
 import com.hqsoft.esales.data.database.SalesOrderDAO;
 import com.hqsoft.esales.data.entity.SalesOrderLocalEntity;
 import com.hqsoft.esales.data.mapper.OrderListLocalMapper;
@@ -9,6 +7,8 @@ import com.hqsoft.esales.domain.entities.OrderListEntity;
 import com.hqsoft.esales.domain.repository.OrderListRepository;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Single;
 
 public class OrderListRepositoryImpl implements OrderListRepository {
     final SalesOrderDAO salesOrderDAO;
@@ -20,8 +20,10 @@ public class OrderListRepositoryImpl implements OrderListRepository {
     }
 
     @Override
-    public List<OrderListEntity> getOrderList() {
+    public Single<List<OrderListEntity>> getOrderList() {
         List<SalesOrderLocalEntity> listSalesOrder = salesOrderDAO.getListSalesOrder();
-        return orderListLocalMapper.mapList(listSalesOrder);
+        return Single.create(emitter ->
+                emitter.onSuccess(orderListLocalMapper.mapList(listSalesOrder))
+        );
     }
 }

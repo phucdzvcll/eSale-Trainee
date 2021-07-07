@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.InventoryEntity;
 import com.hqsoft.esales.domain.repository.InventoryRepository;
+import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
@@ -13,7 +14,11 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryListUseCase extends UseCase<UseCaseParam.EmptyParam, InventoryListUseCase.Result> {
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleSource;
+import io.reactivex.rxjava3.functions.Function;
+
+public class InventoryListUseCase extends RXUseCase<UseCaseParam.EmptyParam, InventoryListUseCase.Result> {
     final InventoryRepository inventoryRepository;
 
     public InventoryListUseCase(InventoryRepository inventoryRepository) {
@@ -21,9 +26,10 @@ public class InventoryListUseCase extends UseCase<UseCaseParam.EmptyParam, Inven
     }
 
     @Override
-    protected ResultPair<Result, UseCaseError> executeInternal(UseCaseParam.EmptyParam emptyParam) {
-        Result result = new Result(inventoryRepository.getListInventory());
-        return new ResultPair<>(result, null);
+    public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
+        return inventoryRepository.getListInventory().flatMap((Function<List<InventoryEntity>, SingleSource<Result>>) inventoryEntities ->
+                Single.just(new Result(inventoryEntities))
+        );
     }
 
     public static class Result {

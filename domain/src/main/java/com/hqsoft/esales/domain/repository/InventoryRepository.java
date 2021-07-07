@@ -4,6 +4,8 @@ import com.hqsoft.esales.domain.entities.InventoryEntity;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Single;
+
 public interface InventoryRepository {
-    List<InventoryEntity> getListInventory();
+    Single<List<InventoryEntity>> getListInventory();
 }
