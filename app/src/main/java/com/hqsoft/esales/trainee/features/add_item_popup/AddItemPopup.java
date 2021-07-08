@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +19,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 
-import com.hqsoft.esales.data.AppDatabase;
-import com.hqsoft.esales.data.database.InventoryDAO;
-import com.hqsoft.esales.data.mapper.InventoryLocalMapper;
-import com.hqsoft.esales.data.repository.InventoryRepositoryImpl;
-import com.hqsoft.esales.domain.repository.InventoryRepository;
-import com.hqsoft.esales.domain.use_cases.InventoryListUseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.R;
-import com.hqsoft.esales.trainee.features.add_item_popup.model.Inventory;
 import com.hqsoft.esales.trainee.features.add_item_popup.viewmodel.PopupViewModel;
 import com.hqsoft.esales.trainee.features.add_item_popup.viewmodel.PopupViewModelFactory;
 import com.hqsoft.esales.trainee.features.customer_list.CustomerListActivity;
@@ -36,16 +31,7 @@ import com.hqsoft.esales.trainee.features.order.OrderActivity;
 import com.hqsoft.esales.trainee.features.order_list.OrderListActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleObserver;
-import io.reactivex.rxjava3.core.SingleSource;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AddItemPopup extends DialogFragment {
     final Style style;
@@ -112,6 +98,23 @@ public class AddItemPopup extends DialogFragment {
         acceptBtn = view.findViewById(R.id.btnAccept);
         closeBtn = view.findViewById(R.id.btnClose);
         handleBtnDialog();
+        EditText search = view.findViewById(R.id.searchProduct);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                popupViewModel.getDataBySearch(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     void setupRecyclerView(View view) {

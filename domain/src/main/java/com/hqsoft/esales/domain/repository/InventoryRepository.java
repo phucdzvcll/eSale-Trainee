@@ -7,5 +7,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Single;
 
 public interface InventoryRepository {
-    Single<List<InventoryEntity>> getListInventory();
+    Single<List<InventoryEntity>> getListInventories();
+
+    Single<List<InventoryEntity>> getListInventoriesBySearch(String searchText);
 }

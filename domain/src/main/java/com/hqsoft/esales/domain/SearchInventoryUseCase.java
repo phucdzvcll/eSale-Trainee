@@ -1,4 +1,4 @@
-package com.hqsoft.esales.domain.use_cases;
+package com.hqsoft.esales.domain;
 
 
 import androidx.annotation.NonNull;
@@ -14,18 +14,30 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.functions.Function;
 
-public class InventoryListUseCase extends RXUseCase<UseCaseParam.EmptyParam, InventoryListUseCase.Result> {
+public class SearchInventoryUseCase extends RXUseCase<SearchInventoryUseCase.Param, SearchInventoryUseCase.Result> {
     final InventoryRepository inventoryRepository;
 
-    public InventoryListUseCase(InventoryRepository inventoryRepository) {
+    public SearchInventoryUseCase(InventoryRepository inventoryRepository) {
         this.inventoryRepository = inventoryRepository;
     }
 
     @Override
-    public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
-        return inventoryRepository.getListInventories().flatMap((Function<List<InventoryEntity>, SingleSource<Result>>) inventoryEntities ->
+    public Single<Result> execute(SearchInventoryUseCase.Param param) {
+        return inventoryRepository.getListInventoriesBySearch(param.searchText).flatMap((Function<List<InventoryEntity>, SingleSource<Result>>) inventoryEntities ->
                 Single.just(new Result(inventoryEntities))
         );
+    }
+
+    public static class Param implements UseCaseParam {
+        final private String searchText;
+
+        public String getSearchText() {
+            return searchText;
+        }
+
+        public Param(String searchText) {
+            this.searchText = searchText;
+        }
     }
 
     public static class Result {

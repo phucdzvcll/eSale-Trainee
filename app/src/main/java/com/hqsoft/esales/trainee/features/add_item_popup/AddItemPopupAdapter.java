@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapter.AddItemViewHolder> {
-    private final ArrayList<Inventory> inventories = new ArrayList<>();
-    private final ArrayList<InventorySelected> inventoriesSelected = new ArrayList<>();
+    final ArrayList<Inventory> inventories = new ArrayList<>();
+    final ArrayList<InventorySelected> inventoriesSelected = new ArrayList<>();
 
     void addData(@NonNull List<Inventory> cuss) {
         inventories.clear();
         inventories.addAll(cuss);
         notifyDataSetChanged();
+    }
+
+
+    public ArrayList<Inventory> getListInvet() {
+        return inventories;
     }
 
     public ArrayList<InventorySelected> getInventoriesSelected() {
@@ -50,7 +54,7 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         View itemView =
                 inflater.inflate(R.layout.item_add_item_popup, parent, false);
 
-        return new AddItemViewHolder(itemView);
+        return new AddItemViewHolder(itemView, new MyTextWatcher());
     }
 
     @Override
@@ -71,36 +75,7 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         holder.itemProperty.setText(inventory.getUnit());
         String stt = (position + 1) + "";
         setUpInventoryAmount(inventory.getId(), holder.itemAmount);
-        holder.itemAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    int exitsIndex = -1;
-                    for (int i = 0; i < inventoriesSelected.size(); i++) {
-                        if (inventoriesSelected.get(i).getInventory().getId().equals(inventory.getId())) {
-                            exitsIndex = i;
-                            break;
-                        }
-                    }
-                    if (exitsIndex > -1) {
-                        InventorySelected newInventory = new InventorySelected(inventoriesSelected.get(exitsIndex).getInventory(), Integer.parseInt(s.toString()));
-                        inventoriesSelected.set(exitsIndex, newInventory);
-                    } else {
-                        inventoriesSelected.add(new InventorySelected(inventory, Integer.parseInt(s.toString())));
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        holder.myTextWatcher.updatePosition(holder.getAdapterPosition());
         holder.indexItem.setText(stt);
         if (position % 2 == 0) {
             holder.linearLayout.setBackgroundColor(Color.WHITE);
@@ -133,8 +108,9 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         final TextView itemPrice;
         final EditText itemAmount;
         final LinearLayout linearLayout;
+        final MyTextWatcher myTextWatcher;
 
-        public AddItemViewHolder(View itemView) {
+        public AddItemViewHolder(View itemView, MyTextWatcher myTextWatcher) {
             super(itemView);
             this.indexItem = itemView.findViewById(R.id.indexItem);
             this.nameItem = itemView.findViewById(R.id.itemName);
@@ -142,6 +118,45 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
             this.itemPrice = itemView.findViewById(R.id.itemPrice);
             this.itemAmount = itemView.findViewById(R.id.itemAmount);
             this.linearLayout = itemView.findViewById(R.id.itemAddPopup);
+            this.myTextWatcher = myTextWatcher;
+            this.itemAmount.addTextChangedListener(this.myTextWatcher);
         }
     }
+
+    private class MyTextWatcher implements TextWatcher {
+        private int position;
+
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (s.length() != 0) {
+                int exitsIndex = -1;
+                for (int i = 0; i < inventoriesSelected.size(); i++) {
+                    if (inventoriesSelected.get(i).getInventory().getId().equals(inventories.get(position).getId())) {
+                        exitsIndex = i;
+                        break;
+                    }
+                }
+                if (exitsIndex > -1) {
+                    InventorySelected newInventory = new InventorySelected(inventoriesSelected.get(exitsIndex).getInventory(), Integer.parseInt(s.toString()));
+                    inventoriesSelected.set(exitsIndex, newInventory);
+                } else {
+                    inventoriesSelected.add(new InventorySelected(inventories.get(position), Integer.parseInt(s.toString())));
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.hqsoft.esales.data.repository;
 
 import com.hqsoft.esales.data.database.InventoryDAO;
-import com.hqsoft.esales.data.entity.InventoryLocalEntity;
 import com.hqsoft.esales.data.mapper.InventoryLocalMapper;
 import com.hqsoft.esales.domain.entities.InventoryEntity;
 import com.hqsoft.esales.domain.repository.InventoryRepository;
@@ -20,10 +19,16 @@ public class InventoryRepositoryImpl implements InventoryRepository {
     }
 
     @Override
-    public Single<List<InventoryEntity>> getListInventory() {
-        List<InventoryLocalEntity> listLocalInventory = inventoryDAO.getListInventory();
+    public Single<List<InventoryEntity>> getListInventories() {
         return Single.create(emitter ->
                 emitter.onSuccess(inventoryLocalMapper.mapList(inventoryDAO.getListInventory()))
+        );
+    }
+
+    @Override
+    public Single<List<InventoryEntity>> getListInventoriesBySearch(String searchText) {
+        return Single.create(emitter ->
+                emitter.onSuccess(inventoryLocalMapper.mapList(inventoryDAO.getListInventoriesBySearch(searchText)))
         );
     }
 }

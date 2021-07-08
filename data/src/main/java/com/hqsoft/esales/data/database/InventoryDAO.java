@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.hqsoft.esales.data.entity.CustomerLocalEntity;
 import com.hqsoft.esales.data.entity.InventoryLocalEntity;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface InventoryDAO {
 
     @Query("Select * from IN_INVENTORY")
     List<InventoryLocalEntity> getListInventory();
+
+    @Query("SELECT * FROM IN_INVENTORY WHERE Name LIKE  '%' || :search || '%' OR InvtID LIKE '%' || :search || '%' OR Price LIKE '%' || :search || '%'")
+    List<InventoryLocalEntity> getListInventoriesBySearch(String search);
 }
