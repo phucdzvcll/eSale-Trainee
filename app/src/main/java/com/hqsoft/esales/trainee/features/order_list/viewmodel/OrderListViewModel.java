@@ -16,6 +16,7 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import com.hqsoft.esales.trainee.features.order_list.OrderListMapper;
 import com.hqsoft.esales.trainee.features.order_list.model.SalesOrder;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -36,18 +37,19 @@ public class OrderListViewModel extends ViewModel {
         return listMutableLiveData;
     }
 
-    public void requestData() {
-        loadData();
+    public void requestData(Date date) {
+        getAllData(date);
     }
 
-    private void loadData() {
+
+    private void getAllData(Date date) {
         AppDatabase appDatabase = AppDatabase.getInstance(context);
         SalesOrderDAO salesOrderDAO = appDatabase.salesOrderDAO();
         OrderListLocalMapper orderListLocalMapper = new OrderListLocalMapper();
         OrderListRepository orderListRepository = new OrderListRepositoryImpl(salesOrderDAO, orderListLocalMapper);
         OrderListMapper orderListMapper = new OrderListMapper();
         OrderListUseCase orderListUseCase = new OrderListUseCase(orderListRepository);
-        Single<OrderListUseCase.Result> result = orderListUseCase.execute(new UseCaseParam.EmptyParam());
+        Single<OrderListUseCase.Result> result = orderListUseCase.execute(new OrderListUseCase.Param(date));
         result.flatMap((Function<OrderListUseCase.Result, SingleSource<List<SalesOrder>>>) result1 ->
                 Single.just(orderListMapper.mapList(result1.getCustomerEntityList()))
         ).observeOn(AndroidSchedulers.mainThread())
@@ -68,7 +70,6 @@ public class OrderListViewModel extends ViewModel {
                         //TODO handle error
                     }
                 });
-        ;
     }
 
     public OrderListViewModel(Context context) {

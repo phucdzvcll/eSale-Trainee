@@ -1,4 +1,4 @@
-package com.hqsoft.esales.domain;
+package com.hqsoft.esales.domain.use_cases;
 
 
 import androidx.annotation.NonNull;

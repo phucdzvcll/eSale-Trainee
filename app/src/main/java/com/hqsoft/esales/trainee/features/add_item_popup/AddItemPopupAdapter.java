@@ -32,11 +32,6 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         notifyDataSetChanged();
     }
 
-
-    public ArrayList<Inventory> getListInvet() {
-        return inventories;
-    }
-
     public ArrayList<InventorySelected> getInventoriesSelected() {
         return inventoriesSelected;
     }
@@ -74,8 +69,8 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
         holder.itemPrice.setText(MessageFormat.format("{0}", inventory.getPrice()));
         holder.itemProperty.setText(inventory.getUnit());
         String stt = (position + 1) + "";
-        setUpInventoryAmount(inventory.getId(), holder.itemAmount);
         holder.myTextWatcher.updatePosition(holder.getAdapterPosition());
+        setUpInventoryAmount(inventory.getId(), holder.itemAmount);
         holder.indexItem.setText(stt);
         if (position % 2 == 0) {
             holder.linearLayout.setBackgroundColor(Color.WHITE);
@@ -85,13 +80,19 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
     }
 
     private void setUpInventoryAmount(String id, EditText itemAmount) {
+        int amount = 0;
         if (inventoriesSelected.size() > 0) {
             for (int i = 0; i < inventoriesSelected.size(); i++) {
                 if (inventoriesSelected.get(i).getInventory().getId().equals(id)) {
-                    itemAmount.setText(MessageFormat.format("{0}", inventoriesSelected.get(i).getAmount()));
+                    amount = inventoriesSelected.get(i).getAmount();
                     break;
                 }
             }
+        }
+        if (amount > 0) {
+            itemAmount.setText(String.valueOf(amount));
+        } else {
+            itemAmount.setText("");
         }
     }
 

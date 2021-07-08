@@ -11,7 +11,7 @@ import com.hqsoft.esales.data.AppDatabase;
 import com.hqsoft.esales.data.database.InventoryDAO;
 import com.hqsoft.esales.data.mapper.InventoryLocalMapper;
 import com.hqsoft.esales.data.repository.InventoryRepositoryImpl;
-import com.hqsoft.esales.domain.SearchInventoryUseCase;
+import com.hqsoft.esales.domain.use_cases.SearchInventoryUseCase;
 import com.hqsoft.esales.domain.repository.InventoryRepository;
 import com.hqsoft.esales.domain.use_cases.InventoryListUseCase;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;

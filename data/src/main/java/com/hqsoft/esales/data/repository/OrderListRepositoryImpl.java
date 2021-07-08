@@ -6,6 +6,7 @@ import com.hqsoft.esales.data.mapper.OrderListLocalMapper;
 import com.hqsoft.esales.domain.entities.OrderListEntity;
 import com.hqsoft.esales.domain.repository.OrderListRepository;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
@@ -20,8 +21,8 @@ public class OrderListRepositoryImpl implements OrderListRepository {
     }
 
     @Override
-    public Single<List<OrderListEntity>> getOrderList() {
-        List<SalesOrderLocalEntity> listSalesOrder = salesOrderDAO.getListSalesOrder();
+    public Single<List<OrderListEntity>> getOrderList(Date date) {
+        List<SalesOrderLocalEntity> listSalesOrder = salesOrderDAO.getListSalesOrder(date.getTime());
         return Single.create(emitter ->
                 emitter.onSuccess(orderListLocalMapper.mapList(listSalesOrder))
         );

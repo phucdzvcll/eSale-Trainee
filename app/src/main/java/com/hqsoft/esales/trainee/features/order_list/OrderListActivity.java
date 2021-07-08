@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -39,9 +40,9 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
+        createOrderListViewModel();
         setupActionBar();
         setupDateVisit();
-        createOrderListViewModel();
         setupRecyclerView();
         setupBtnAdd();
         orderListViewModel.getListMutableLiveData().observe(this,salesOrders -> {
@@ -58,11 +59,17 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
     @Override
     protected void onResume() {
         super.onResume();
-        requestData();
+        Calendar c = new GregorianCalendar();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND,0);
+        Date date = c.getTime();
+        requestData(date);
     }
 
-    private void requestData() {
-        orderListViewModel.requestData();
+    private void requestData(Date date) {
+        orderListViewModel.requestData(date);
     }
 
     private void setupActionBar() {
@@ -122,7 +129,19 @@ public class OrderListActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String date = dayOfMonth + "/" + month + "/" + year;
-        dateVisit.setText(date);
+        Calendar c = new GregorianCalendar();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        c.set(Calendar.MILLISECOND,0);
+        c.set(Calendar.YEAR,year);
+        c.set(Calendar.MONTH,month);
+        Date date = c.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        String strDate = formatter.format(date);
+        requestData(date);
+        dateVisit.setText(strDate);
+
     }
 }

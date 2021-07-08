@@ -2,21 +2,19 @@ package com.hqsoft.esales.domain.use_cases;
 
 import androidx.annotation.NonNull;
 
-import com.hqsoft.esales.common_jvm.common.ResultPair;
 import com.hqsoft.esales.domain.entities.OrderListEntity;
 import com.hqsoft.esales.domain.repository.OrderListRepository;
 import com.hqsoft.esales.domain.use_cases.RX_java_use_case.RXUseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCase;
-import com.hqsoft.esales.domain.use_cases.base.UseCaseError;
 import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.functions.Function;
 
-public class OrderListUseCase extends RXUseCase<UseCaseParam.EmptyParam, OrderListUseCase.Result> {
+public class OrderListUseCase extends RXUseCase<OrderListUseCase.Param, OrderListUseCase.Result> {
     final OrderListRepository orderListRepository;
 
     public OrderListUseCase(OrderListRepository orderListRepository) {
@@ -24,12 +22,23 @@ public class OrderListUseCase extends RXUseCase<UseCaseParam.EmptyParam, OrderLi
     }
 
     @Override
-    public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
-        return orderListRepository.getOrderList().flatMap((Function<List<OrderListEntity>, SingleSource<Result>>) orderListEntities ->
+    public Single<Result> execute(OrderListUseCase.Param param) {
+        return orderListRepository.getOrderList(param.date).flatMap((Function<List<OrderListEntity>, SingleSource<Result>>) orderListEntities ->
                 Single.just(new Result(orderListEntities))
         );
     }
 
+    public static class Param implements UseCaseParam{
+        final private Date date;
+
+        public Date getDate() {
+            return date;
+        }
+
+        public Param(Date date) {
+            this.date = date;
+        }
+    }
 
     public static class Result {
         @NonNull
