@@ -38,13 +38,12 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
     public static AppDatabase getInstance(final Context context) {
-        String DATABASE_NAME = "myapp";
-        String DATABASE_DIR = "database/myapp";
+        String DATABASE_NAME = "eSales1.db3";
+        String DATABASE_DIR = "database/eSales1.db3";
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
-                            .allowMainThreadQueries()
                             .createFromAsset(DATABASE_DIR)
                             .build();
                 }

@@ -22,9 +22,8 @@ public class OrderListRepositoryImpl implements OrderListRepository {
 
     @Override
     public Single<List<OrderListEntity>> getOrderList(Date date) {
-        List<SalesOrderLocalEntity> listSalesOrder = salesOrderDAO.getListSalesOrder(date.getTime());
         return Single.create(emitter ->
-                emitter.onSuccess(orderListLocalMapper.mapList(listSalesOrder))
+                emitter.onSuccess(orderListLocalMapper.mapList(salesOrderDAO.getListSalesOrder(date.getTime())))
         );
     }
 }

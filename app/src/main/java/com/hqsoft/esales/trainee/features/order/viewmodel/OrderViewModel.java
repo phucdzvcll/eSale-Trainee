@@ -19,6 +19,12 @@ import com.hqsoft.esales.trainee.features.order.OrderDetMapper;
 
 import java.util.ArrayList;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class OrderViewModel extends ViewModel {
     @SuppressLint("StaticFieldLeak")
     final private Context context;
@@ -40,6 +46,24 @@ public class OrderViewModel extends ViewModel {
         SalesOrderDeMapper salesOrderDeMapper = new SalesOrderDeMapper();
         SaveToSalesOrdRepository saveToSalesOrdRepository = new SaveToSalesOrderRepositoryImpl(salesOrderDAO, salesOrderDetDAO, salesOrderEntityMapper, salesOrderDeMapper);
         SaveOderUseCase saveOderUseCase = new SaveOderUseCase(saveToSalesOrdRepository);
-        saveOderUseCase.execute(new SaveOderUseCase.Param(new OrderEntity(orderEntity,orderDetMapper.mapList(inventorySelected))));
+        saveOderUseCase.execute(new SaveOderUseCase.Param(new OrderEntity(orderEntity,orderDetMapper.mapList(inventorySelected))))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<SaveOderUseCase.Result>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(SaveOderUseCase.@NonNull Result result) {
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 }

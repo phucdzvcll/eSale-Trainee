@@ -16,6 +16,8 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleEmitter;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.functions.Function;
 
@@ -30,7 +32,9 @@ public class CustomerListUseCase extends RXUseCase<UseCaseParam.EmptyParam, Cust
     @Override
     public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
         return customerRepository.getListCustomerRX().flatMap((Function<List<CustomerEntity>, SingleSource<Result>>) customerEntities ->
-                Single.just(new Result(customerEntities))
+                Single.create((SingleOnSubscribe<Result>) emitter ->
+                        emitter.onSuccess(new Result(customerEntities))
+                )
         );
     }
 

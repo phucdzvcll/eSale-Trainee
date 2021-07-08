@@ -11,6 +11,7 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.functions.Function;
 
@@ -24,8 +25,9 @@ public class InventoryListUseCase extends RXUseCase<UseCaseParam.EmptyParam, Inv
     @Override
     public Single<Result> execute(UseCaseParam.EmptyParam emptyParam) {
         return inventoryRepository.getListInventories().flatMap((Function<List<InventoryEntity>, SingleSource<Result>>) inventoryEntities ->
-                Single.just(new Result(inventoryEntities))
-        );
+                Single.create((SingleOnSubscribe<Result>) emitter ->
+                        emitter.onSuccess(new Result(inventoryEntities))
+                ));
     }
 
     public static class Result {

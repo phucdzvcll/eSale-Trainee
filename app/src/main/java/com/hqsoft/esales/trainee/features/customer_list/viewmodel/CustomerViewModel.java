@@ -50,11 +50,15 @@ public class CustomerViewModel extends ViewModel {
     public void getDataBySearch(String searchText) {
         AppDatabase appDatabase = AppDatabase.getInstance(context);
         CustomerDAO customerDAO = appDatabase.customerDAO();
+
         CustomerLocalMapper customerLocalMapper = new CustomerLocalMapper();
         CustomerRepository customerRepository = new CustomerRepositoryImpl(customerDAO, customerLocalMapper);
+
         CustomerListMapper customerListMapper = new CustomerListMapper();
         SearchCustomerUseCase searchCustomerUseCase = new SearchCustomerUseCase(customerRepository);
+
         Single<SearchCustomerUseCase.Result> resultSingle = searchCustomerUseCase.execute(new SearchCustomerUseCase.Param(searchText));
+
         resultSingle.flatMap((Function<SearchCustomerUseCase.Result, SingleSource<List<Customer>>>) result ->
                 Single.just(customerListMapper.mapList(result.getCustomerEntityList()))
         ).observeOn(AndroidSchedulers.mainThread())

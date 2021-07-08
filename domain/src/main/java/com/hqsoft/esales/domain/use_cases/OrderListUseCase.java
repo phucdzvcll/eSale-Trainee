@@ -11,8 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleEmitter;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderListUseCase extends RXUseCase<OrderListUseCase.Param, OrderListUseCase.Result> {
     final OrderListRepository orderListRepository;
@@ -24,11 +27,13 @@ public class OrderListUseCase extends RXUseCase<OrderListUseCase.Param, OrderLis
     @Override
     public Single<Result> execute(OrderListUseCase.Param param) {
         return orderListRepository.getOrderList(param.date).flatMap((Function<List<OrderListEntity>, SingleSource<Result>>) orderListEntities ->
-                Single.just(new Result(orderListEntities))
+                Single.create((SingleOnSubscribe<Result>) emitter ->
+                        emitter.onSuccess(new Result(orderListEntities))
+                )
         );
     }
 
-    public static class Param implements UseCaseParam{
+    public static class Param implements UseCaseParam {
         final private Date date;
 
         public Date getDate() {

@@ -11,6 +11,8 @@ import com.hqsoft.esales.domain.use_cases.base.UseCaseParam;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleEmitter;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.functions.Function;
 
@@ -24,7 +26,9 @@ public class SearchInventoryUseCase extends RXUseCase<SearchInventoryUseCase.Par
     @Override
     public Single<Result> execute(SearchInventoryUseCase.Param param) {
         return inventoryRepository.getListInventoriesBySearch(param.searchText).flatMap((Function<List<InventoryEntity>, SingleSource<Result>>) inventoryEntities ->
-                Single.just(new Result(inventoryEntities))
+                Single.create((SingleOnSubscribe<Result>) emitter ->
+                        emitter.onSuccess(new Result(inventoryEntities))
+                )
         );
     }
 
