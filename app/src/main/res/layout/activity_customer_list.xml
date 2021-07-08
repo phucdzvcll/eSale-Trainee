@@ -37,23 +37,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_5"
-                android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:text="@string/search"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/dateVisit"
+                android:id="@+id/searchCuss"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_5"
-                android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
                 android:background="@android:color/transparent"
                 android:hint="@string/search_hint"
-                android:inputType="datetime"
+                android:inputType="text"
                 android:textSize="14sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

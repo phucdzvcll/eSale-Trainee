@@ -7,7 +7,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Single;
 
 public interface CustomerRepository {
-//    List<CustomerEntity> getListCustomer();
-
     Single<List<CustomerEntity>> getListCustomerRX();
+
+    Single<List<CustomerEntity>> getListCustomerBySearchRX(String searchText);
 }

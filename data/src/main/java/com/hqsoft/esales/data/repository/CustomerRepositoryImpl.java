@@ -24,4 +24,11 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 emitter.onSuccess(customerLocalMapper.mapList(customerDAO.getListCustomer()))
         );
     }
+
+    @Override
+    public Single<List<CustomerEntity>> getListCustomerBySearchRX(String searchText) {
+        return Single.create(emitter ->
+                emitter.onSuccess(customerLocalMapper.mapList(customerDAO.getListCustomerBySearch(searchText)))
+        );
+    }
 }

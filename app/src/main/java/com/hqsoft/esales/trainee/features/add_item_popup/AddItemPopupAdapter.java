@@ -54,6 +54,16 @@ public class AddItemPopupAdapter extends RecyclerView.Adapter<AddItemPopupAdapte
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
     public void onBindViewHolder(AddItemViewHolder holder, int position) {
         Inventory inventory = inventories.get(position);
         holder.nameItem.setText(inventory.getName());

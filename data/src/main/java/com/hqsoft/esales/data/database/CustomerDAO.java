@@ -14,14 +14,17 @@ public interface CustomerDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<CustomerLocalEntity> customerLocalEntities);
 
-    @Query("DELETE from AR_CUSTOMER")
+    @Query("DELETE FROM AR_CUSTOMER")
     void deleteAllCustomer();
 
-    @Query("Select * from AR_CUSTOMER")
+    @Query("SELECT * FROM AR_CUSTOMER")
     List<CustomerLocalEntity> getListCustomer();
 
     @Insert()
     void insertToTable(CustomerLocalEntity customerLocalEntity);
+
+    @Query("SELECT * FROM AR_CUSTOMER WHERE Name LIKE  '%' || :search || '%' OR Address LIKE '%' || :search || '%' OR CustID LIKE '%' || :search || '%'")
+    List<CustomerLocalEntity> getListCustomerBySearch(String search);
 }
 
 

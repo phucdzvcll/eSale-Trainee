@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import com.hqsoft.esales.trainee.R;
 import com.hqsoft.esales.trainee.features.customer_list.model.Customer;
@@ -28,12 +31,33 @@ public class CustomerListActivity extends AppCompatActivity implements OnItemRec
         setupRecyclerView();
         createCustomerViewModel();
         customerViewModel.getCuListMutableLiveData().observe(this, customerAdapter::addData);
+        search();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         requestData();
+    }
+
+    private void search(){
+        EditText search = findViewById(R.id.searchCuss);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                customerViewModel.getDataBySearch(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void requestData() {

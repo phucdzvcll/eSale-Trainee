@@ -42,7 +42,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     public void onBindViewHolder(OrderListViewHolder holder, int position) {
         SalesOrder salesOrder = salesOrders.get(position);
 
-        double total = (salesOrder.getOrderQty() * salesOrder.getOrderAmt());
+        double total = salesOrder.getOrderAmt();
         holder.totalPerOrder.setText(MessageFormat.format("{0}", total));
         holder.nameOrder.setText(salesOrder.getOrderNbr());
 
