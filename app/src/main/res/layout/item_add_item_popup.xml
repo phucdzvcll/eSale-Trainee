@@ -69,7 +69,7 @@
         android:textSize="12sp"
         tools:text="35000" />
 
-    <EditText
+    <com.hqsoft.esales.trainee.features.add_item_popup.EditTextWithRemovableTextWatchers
         android:id="@+id/itemAmount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
